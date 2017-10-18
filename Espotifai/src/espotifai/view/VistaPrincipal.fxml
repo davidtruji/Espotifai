@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="espotifai.view.VistaPrincipalController">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="Archivo">
+                  <items>
+                        <MenuItem disable="true" mnemonicParsing="false" text="Guardar Playlist..." />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Salir" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Generar">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#AccionGenerarPlaylist" text="Generar Playlist..." />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Generar Indice de biblioteca..." />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <AnchorPane>
+               <children>
+                  <HBox layoutX="449.0" layoutY="-2.0" prefHeight="35.0" prefWidth="441.0" spacing="5.0" AnchorPane.leftAnchor="449.0" AnchorPane.rightAnchor="10.0" GridPane.columnIndex="1">
+                     <children>
+                        <TextField fx:id="rutaSeleccionada" promptText="Ruta de música" GridPane.columnIndex="1" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#AccionSeleccionarDirectorio" text="Examinar..." GridPane.columnIndex="1" />
+                     </children>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox layoutX="337.0" layoutY="-1.0" spacing="5.0" AnchorPane.leftAnchor="0.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#AccionAnadirMusicaAPlaylist" text="Añadir" />
+                        <Button mnemonicParsing="false" onAction="#AcccionAnadirTodo" text="Añadir Todo" />
+                        <Button mnemonicParsing="false" onAction="#AcccionQuitar" text="Quitar" />
+                        <Button mnemonicParsing="false" onAction="#AccionLimpiarPlaylist" text="Limpiar" />
+                        <Button disable="true" mnemonicParsing="false" text="Editar Etiquetas" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <AnchorPane maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="437.0" prefWidth="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox spacing="5.0">
+                     <children>
+                        <Label fx:id="nombreCarpeta" text="Dir" textFill="RED">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="numeroCancionesDir" text="0">
+                           <font>
+                              <Font name="Ubuntu" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <TableView fx:id="musicaTableDir" VBox.vgrow="ALWAYS">
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <columns>
+                        <TableColumn fx:id="ArtistaDir" prefWidth="75.0" text="Artista" />
+                        <TableColumn fx:id="TituloDir" prefWidth="75.0" text="Titulo" />
+                        <TableColumn fx:id="AlbumDir" prefWidth="75.0" text="Album" />
+                        <TableColumn fx:id="AnoDir" prefWidth="75.0" text="Año" />
+                     </columns>
+                  </TableView>
+               </children>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" />
+         </BorderPane.margin>
+      </AnchorPane>
+   </center>
+   <right>
+      <AnchorPane prefWidth="320.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox spacing="5.0">
+                     <children>
+                        <Label alignment="TOP_LEFT" text="Playlist" textFill="RED">
+                           <font>
+                              <Font name="Ubuntu Bold Italic" size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="10.0" top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="numeroCanciones" text="0 Canciones">
+                           <font>
+                              <Font name="Ubuntu" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <TableView fx:id="musicaTable" VBox.vgrow="ALWAYS">
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <columns>
+                        <TableColumn fx:id="Artista" prefWidth="75.0" text="Artista" />
+                        <TableColumn fx:id="Titulo" prefWidth="75.0" text="Título" />
+                        <TableColumn fx:id="Album" prefWidth="75.0" text="Album" />
+                        <TableColumn fx:id="Ano" prefWidth="75.0" text="Año" />
+                     </columns>
+                  </TableView>
+               </children>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="5.0" right="10.0" />
+         </BorderPane.margin>
+      </AnchorPane>
+   </right>
+</BorderPane>
