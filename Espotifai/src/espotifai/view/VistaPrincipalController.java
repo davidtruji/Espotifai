@@ -1,7 +1,6 @@
 package espotifai.view;
 import java.io.File;
 import java.io.IOException;
-
 import espotifai.Main;
 import espotifai.model.Musica;
 import javafx.collections.ObservableList;
@@ -15,8 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
 
-
-//tocaaaaaao
 
 public class VistaPrincipalController {
 

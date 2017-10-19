@@ -27,7 +27,8 @@ public class Main extends Application {
 
 	public ObservableList<Musica> getMusicaDirectorio() {
 		return musicaDirectorio;
-	}
+	}	
+	
 
 	public void setMusicaDirectorio(ObservableList<Musica> musicaDirectorio) {
 		this.musicaDirectorio = musicaDirectorio;
@@ -111,7 +112,6 @@ public class Main extends Application {
 
 			LanzarDialogoPlaylistGenerada(f);
 		}
-
 	}
 
 	public void LanzarDialogoPlaylistGenerada(File f) {
