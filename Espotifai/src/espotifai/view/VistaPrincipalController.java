@@ -61,6 +61,8 @@ public class VistaPrincipalController {
 				case DELETE:
 					AcccionQuitar();
 					break;
+				default:
+					break;
 				}
 			}
 		});
@@ -71,6 +73,8 @@ public class VistaPrincipalController {
 				switch (event.getCode()) {
 				case ENTER:
 					AccionAnadirMusicaAPlaylist();
+					break;
+				default:
 					break;
 				}
 			}
@@ -119,7 +123,7 @@ public class VistaPrincipalController {
 
 		main.getMusicaDirectorio().clear();
 
-		File dir = main.LanzarDialogoEleccionDirectorio();
+		File dir = main.LanzarDialogoEleccionDirectorio("Por favor seleccione un directorio");
 
 		if (dir != null) {
 			nombreCarpeta.setVisible(true);
@@ -129,8 +133,6 @@ public class VistaPrincipalController {
 			numeroCancionesDir.setVisible(true);
 			numeroCancionesDir.setText(Integer.toString(main.getMusicaDirectorio().size()) + " Canciones encontradas");
 			musicaTableDir.setDisable(false);
-			// musicaTable.setDisable(false);
-
 		}
 	}
 
@@ -149,7 +151,8 @@ public class VistaPrincipalController {
 		}
 
 		if (rep)
-			main.LanzarDialogoCancionRepetida();
+			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
+					" Estas canciones no se añarirán...");
 
 		actualizarNumeroCancionesPlayslist();
 
@@ -183,7 +186,8 @@ public class VistaPrincipalController {
 		}
 
 		if (rep)
-			main.LanzarDialogoCancionRepetida();
+			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
+					" Estas canciones no se añarirán...");
 
 		actualizarNumeroCancionesPlayslist();
 
@@ -193,27 +197,28 @@ public class VistaPrincipalController {
 
 	@FXML
 	void AccionGenerarPlaylist() throws IOException {
-		if (!main.getPlaylist().isEmpty())
-			main.GenerarPlaylist(main.LanzarDialogoGenerar());
-		else
-			main.LanzarDialogoPlaylistVacia();
+		if (!main.getPlaylist().isEmpty()) {
+			File f = main.LanzarDialogoGenerar();
+			if (f != null) {
+				main.GenerarPlaylist(f);
+				main.LanzarDialogoInformacion("Su playlist se ha generado correctamente:", f.getPath());
+			}
+		} else
+			main.LanzarDialogoError("No ha añadido ninguna canción a su playlist", "Pulse el boton añadir");
 	}
 
-	//TODO
 	@FXML
-	private void AccionGenerarIndice() {
+	private void AccionGenerarIndice() throws IOException {
+		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la música");
 
-		
-		main.GenerarFicheroIndice(main.LanzarDialogoEleccionDirectorio()," ");
-		
-		
-		
+		if (f != null) {
+			main.GenerarFicheroIndice(f);
+			main.LanzarDialogoInformacion("Índice generado correctamente:", f.getAbsolutePath());
+		}
 	}
 
 	private void actualizarNumeroCancionesPlayslist() {
-
 		numeroCanciones.setText(Integer.toString(main.getPlaylist().size()) + " Canciones");
-
 	}
 
 }

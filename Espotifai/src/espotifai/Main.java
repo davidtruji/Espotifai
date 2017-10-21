@@ -3,6 +3,7 @@ package espotifai;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Calendar;
 
 import espotifai.model.Musica;
 import espotifai.view.VistaPrincipalController;
@@ -22,7 +23,9 @@ public class Main extends Application {
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
-
+	private int ContadorIndice = 0;
+	private float tamBiblioteca = 0;
+	private ObservableList<Musica> playlist = FXCollections.observableArrayList();
 	private ObservableList<Musica> musicaDirectorio = FXCollections.observableArrayList();
 
 	public ObservableList<Musica> getMusicaDirectorio() {
@@ -33,11 +36,7 @@ public class Main extends Application {
 		this.musicaDirectorio = musicaDirectorio;
 	}
 
-	private ObservableList<Musica> playlist = FXCollections.observableArrayList();
-
 	public Main() {
-		// playlist.add(new Musica("DJ Rajobos", "Cancion 1"));
-
 	}
 
 	@Override
@@ -47,7 +46,6 @@ public class Main extends Application {
 		primaryStage.setMinHeight(500);
 		primaryStage.setMinWidth(900);
 		iniciarRootLayout();
-
 	}
 
 	private void iniciarRootLayout() {
@@ -56,13 +54,10 @@ public class Main extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/VistaPrincipal.fxml"));
 			rootLayout = (BorderPane) loader.load();
-
 			// Muestra la escena que contine el layout
 			Scene scene = new Scene(rootLayout);
-
 			primaryStage.setScene(scene);
 			primaryStage.show();
-
 			VistaPrincipalController controller = loader.getController();
 			controller.setMain(this);
 		} catch (IOException e) {
@@ -71,65 +66,51 @@ public class Main extends Application {
 
 	}
 
-	public File LanzarDialogoEleccionDirectorio() {
+	public File LanzarDialogoEleccionDirectorio(String titulo) {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
-		directoryChooser.setTitle("Selección de directorio");
+		directoryChooser.setTitle(titulo);
 		directoryChooser.setInitialDirectory(new File("/"));
 		File selectedDir = directoryChooser.showDialog(primaryStage);
-
 		return selectedDir;
-
 	}
 
 	public File LanzarDialogoGenerar() {
 		FileChooser f = new FileChooser();
 		f.setTitle("Guarde su playlist");
 		f.setInitialDirectory(new File("/"));
-		// show save dialog:
 		File savedFile = f.showSaveDialog(primaryStage);
 		return savedFile;
 	}
 
-	public void LanzarDialogoPlaylistVacia() {
+	public void LanzarDialogoError(String header, String text) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Espotifai - Error");
-		alert.setHeaderText("Su playlist está vacia");
-		alert.setContentText("Puede añadir canciones pulsando el botón [añadir]");
-
+		alert.setHeaderText(header);
+		alert.setContentText(text);
 		alert.showAndWait();
 	}
 
 	public void GenerarPlaylist(File f) throws IOException {
-		if (f != null) {
-			FileWriter writer = new FileWriter(f.getAbsolutePath() + ".m3u");
-
-			// System.out.println("Generando fichero..." + playlist.size() + " Archivos");
-			for (int i = 0; i < playlist.size(); i++)
-				writer.write(playlist.get(i).getArchivo().getAbsolutePath() + "\n");
-
-			writer.close();
-
-			LanzarDialogoPlaylistGenerada(f);
-		}
+		FileWriter writer = new FileWriter(f.getAbsolutePath() + ".m3u");
+		for (int i = 0; i < playlist.size(); i++)
+			writer.write(playlist.get(i).getArchivo().getAbsolutePath() + "\n");
+		writer.close();
 	}
 
-	public void LanzarDialogoPlaylistGenerada(File f) {
+	public void LanzarDialogoInformacion(String header, String text) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Espotifai - Información");
-		alert.setHeaderText("Su playlist se ha generado correctamente:");
-		alert.setContentText(f.getAbsolutePath());
-
+		alert.setHeaderText(header);
+		alert.setContentText(text);
 		alert.showAndWait();
 	}
 
-	public void LanzarDialogoCancionRepetida() {
+	public void LanzarDialogoAdvertencia(String header, String text) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Espotifai - Advertencia");
-		alert.setHeaderText("Una o mas canciones seleccionadas ya se encuentran en su playlist");
-		alert.setContentText("Las canciones repetidas no se añadirán");
-
+		alert.setHeaderText(header);
+		alert.setContentText(text);
 		alert.showAndWait();
-
 	}
 
 	private boolean esMusica(File f) {
@@ -140,43 +121,61 @@ public class Main extends Application {
 			return true;
 		else
 			return false;
-
 	}
 
 	public void AnadirMusicaDirectoio(File Dir) {
-		if (Dir != null) {
-			File[] musicaEncontrada = Dir.listFiles();
-
-			for (int i = 0; i < musicaEncontrada.length; i++) {
-				if (esMusica(musicaEncontrada[i]))
-					musicaDirectorio.add(new Musica(musicaEncontrada[i]));
-
-			}
-
+		File[] musicaEncontrada = Dir.listFiles();
+		for (int i = 0; i < musicaEncontrada.length; i++) {
+			if (esMusica(musicaEncontrada[i]))
+				musicaDirectorio.add(new Musica(musicaEncontrada[i]));
 		}
-
 	}
 
-	// TODO
-	public void GenerarFicheroIndice(File f, String sep) {
+	private String fechaActual() {
+		Calendar c = Calendar.getInstance();
+		String h = Integer.toString(c.get(Calendar.HOUR));
+		String m = Integer.toString(c.get(Calendar.MINUTE));
+		String s = Integer.toString(c.get(Calendar.SECOND));
+		String hora = (h + ":" + m + ":" + s);
+		String dia = Integer.toString(c.get(Calendar.DATE));
+		String mes = Integer.toString(c.get(Calendar.MONTH));
+		String annio = Integer.toString(c.get(Calendar.YEAR));
+		return (dia + "-" + mes + "-" + annio + "_" + hora);
+	}
+
+	public void GenerarFicheroIndiceR(File f, FileWriter fw, String sep) throws IOException {
 		File[] ficheros;
 		ficheros = f.listFiles();
-
-		// for (int i = 0; i < archivos.length; i++) {
-		// if (archivos[i].isDirectory())
-		// System.out.println(archivos[i].getAbsolutePath());
-		// }
-
-		// File[] ficheros;
-		for (int x = 0; x < ficheros.length; x++) {
-			System.out.println(sep + ficheros[x].getName());
-			if (ficheros[x].isDirectory()) {
+		for (int i = 0; i < ficheros.length; i++) {
+			if (esMusica(ficheros[i])) {
+				fw.write(sep + ficheros[i].getName() + "\n");
+				ContadorIndice++;
+				tamBiblioteca = tamBiblioteca + ficheros[i].length();
+			} else if (ficheros[i].isDirectory()) {
+				fw.write("\n");
+				fw.write("\n");
+				fw.write(sep + "[" + ficheros[i].getName() + "...]" + "\n");
 				String nuevo_separador;
-				nuevo_separador = sep + " ";
-				GenerarFicheroIndice(ficheros[x], nuevo_separador);
+				nuevo_separador = sep + "  ";
+				GenerarFicheroIndiceR(ficheros[i], fw, nuevo_separador);
 			}
 		}
+	}
 
+	public void GenerarFicheroIndice(File f) throws IOException {
+		FileWriter writer = new FileWriter(f.getAbsolutePath() + "//Indice_" + fechaActual() + ".txt");
+		writer.write("ÍNDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI");
+		String sep = "  ";
+		ContadorIndice = 0;
+		tamBiblioteca = 0;
+		GenerarFicheroIndiceR(f, writer, sep);
+		writer.write("\n\n\n");
+		writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + "\n");
+		if (tamBiblioteca > 1000000000)
+			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÚSICA");
+		else
+			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA");
+		writer.close();
 	}
 
 	public ObservableList<Musica> getPlaylist() {
@@ -189,6 +188,5 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-
 	}
 }
