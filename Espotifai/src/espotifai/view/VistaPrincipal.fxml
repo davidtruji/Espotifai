@@ -22,7 +22,7 @@
                 <Menu mnemonicParsing="false" text="Generar">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#AccionGenerarPlaylist" text="Generar Playlist..." />
-                        <MenuItem disable="true" mnemonicParsing="false" text="Generar Indice de biblioteca..." />
+                        <MenuItem mnemonicParsing="false" onAction="#AccionGenerarIndice" text="Generar Indice de biblioteca..." />
                   </items>
                 </Menu>
               </menus>

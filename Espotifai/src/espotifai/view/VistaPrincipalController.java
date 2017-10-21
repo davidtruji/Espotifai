@@ -1,4 +1,5 @@
 package espotifai.view;
+
 import java.io.File;
 import java.io.IOException;
 import espotifai.Main;
@@ -12,8 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-
-
 
 public class VistaPrincipalController {
 
@@ -200,7 +199,18 @@ public class VistaPrincipalController {
 			main.LanzarDialogoPlaylistVacia();
 	}
 
-	void actualizarNumeroCancionesPlayslist() {
+	//TODO
+	@FXML
+	private void AccionGenerarIndice() {
+
+		
+		main.GenerarFicheroIndice(main.LanzarDialogoEleccionDirectorio()," ");
+		
+		
+		
+	}
+
+	private void actualizarNumeroCancionesPlayslist() {
 
 		numeroCanciones.setText(Integer.toString(main.getPlaylist().size()) + " Canciones");
 

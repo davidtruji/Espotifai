@@ -27,8 +27,7 @@ public class Main extends Application {
 
 	public ObservableList<Musica> getMusicaDirectorio() {
 		return musicaDirectorio;
-	}	
-	
+	}
 
 	public void setMusicaDirectorio(ObservableList<Musica> musicaDirectorio) {
 		this.musicaDirectorio = musicaDirectorio;
@@ -133,21 +132,49 @@ public class Main extends Application {
 
 	}
 
+	private boolean esMusica(File f) {
+		String nombre = f.getName();
+		if (nombre.endsWith("mp3") || nombre.endsWith("MP3") || nombre.endsWith("flac") || nombre.endsWith("FLAC")
+				|| nombre.endsWith("wav") || nombre.endsWith("WAV") || nombre.endsWith("wma") || nombre.endsWith("WMA")
+				|| nombre.endsWith("ogg") || nombre.endsWith("OGG"))
+			return true;
+		else
+			return false;
+
+	}
+
 	public void AnadirMusicaDirectoio(File Dir) {
-		String nombre;
 		if (Dir != null) {
 			File[] musicaEncontrada = Dir.listFiles();
 
 			for (int i = 0; i < musicaEncontrada.length; i++) {
-				nombre = musicaEncontrada[i].getName();
-				if (nombre.endsWith("mp3") || nombre.endsWith("MP3") || nombre.endsWith("flac")
-						|| nombre.endsWith("FLAC") || nombre.endsWith("wav") || nombre.endsWith("WAV")
-						|| nombre.endsWith("wma") || nombre.endsWith("WMA") || nombre.endsWith("ogg")
-						|| nombre.endsWith("OGG")) {
+				if (esMusica(musicaEncontrada[i]))
 					musicaDirectorio.add(new Musica(musicaEncontrada[i]));
-				}
+
 			}
 
+		}
+
+	}
+
+	// TODO
+	public void GenerarFicheroIndice(File f, String sep) {
+		File[] ficheros;
+		ficheros = f.listFiles();
+
+		// for (int i = 0; i < archivos.length; i++) {
+		// if (archivos[i].isDirectory())
+		// System.out.println(archivos[i].getAbsolutePath());
+		// }
+
+		// File[] ficheros;
+		for (int x = 0; x < ficheros.length; x++) {
+			System.out.println(sep + ficheros[x].getName());
+			if (ficheros[x].isDirectory()) {
+				String nuevo_separador;
+				nuevo_separador = sep + " ";
+				GenerarFicheroIndice(ficheros[x], nuevo_separador);
+			}
 		}
 
 	}
