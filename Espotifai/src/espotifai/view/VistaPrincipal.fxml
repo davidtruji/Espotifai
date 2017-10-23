@@ -16,7 +16,7 @@
                 <Menu mnemonicParsing="false" text="Archivo">
                   <items>
                         <MenuItem disable="true" mnemonicParsing="false" text="Guardar Playlist..." />
-                        <MenuItem disable="true" mnemonicParsing="false" text="Salir" />
+                        <MenuItem mnemonicParsing="false" onAction="#AccionSalir" text="Salir" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Generar">
@@ -47,7 +47,7 @@
                         <Button mnemonicParsing="false" onAction="#AcccionAnadirTodo" text="Añadir Todo" />
                         <Button mnemonicParsing="false" onAction="#AcccionQuitar" text="Quitar" />
                         <Button mnemonicParsing="false" onAction="#AccionLimpiarPlaylist" text="Limpiar" />
-                        <Button disable="true" mnemonicParsing="false" text="Editar Etiquetas" />
+                        <Button mnemonicParsing="false" onAction="#AccionEditarEtiquetas" text="Editar Etiquetas" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="10.0" top="5.0" />
@@ -91,10 +91,12 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <columns>
+                        <TableColumn fx:id="fichero" prefWidth="75.0" text="Fichero" />
                         <TableColumn fx:id="ArtistaDir" prefWidth="75.0" text="Artista" />
                         <TableColumn fx:id="TituloDir" prefWidth="75.0" text="Titulo" />
                         <TableColumn fx:id="AlbumDir" prefWidth="75.0" text="Album" />
                         <TableColumn fx:id="AnoDir" prefWidth="75.0" text="Año" />
+                        <TableColumn fx:id="GeneroDir" prefWidth="75.0" text="Género" />
                      </columns>
                   </TableView>
                </children>

@@ -2,8 +2,13 @@ package espotifai.view;
 
 import java.io.File;
 import java.io.IOException;
+
+import org.jaudiotagger.logging.PlainTextTagDisplayFormatter;
+
 import espotifai.Main;
 import espotifai.model.Musica;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -26,6 +31,9 @@ public class VistaPrincipalController {
 	private Label numeroCanciones;
 	@FXML
 	private TableView<Musica> musicaTableDir;
+
+	@FXML
+	private TableColumn<Musica, String> fichero;
 	@FXML
 	private TableColumn<Musica, String> ArtistaDir;
 	@FXML
@@ -34,6 +42,8 @@ public class VistaPrincipalController {
 	private TableColumn<Musica, String> AlbumDir;
 	@FXML
 	private TableColumn<Musica, String> AnoDir;
+	@FXML
+	private TableColumn<Musica, String> GeneroDir;
 
 	@FXML
 	private TableView<Musica> musicaTable;
@@ -80,14 +90,17 @@ public class VistaPrincipalController {
 			}
 		});
 
+		// TODO Añadir más informacion a la tabla
 		// Inicializa la tabla de directorio
 		musicaTableDir.setDisable(true);
 		musicaTableDir.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+		fichero.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArchivo().getName()));
 		ArtistaDir.setCellValueFactory(cellData -> cellData.getValue().getArtista());
 		TituloDir.setCellValueFactory(cellData -> cellData.getValue().getTitulo());
 		AlbumDir.setCellValueFactory(cellData -> cellData.getValue().getAlbum());
 		AnoDir.setCellValueFactory(cellData -> cellData.getValue().getAno());
+		GeneroDir.setCellValueFactory(cellData -> cellData.getValue().getGenero());
 
 		// Inicializa la tabla de playlist
 		musicaTable.setDisable(true);
@@ -204,17 +217,38 @@ public class VistaPrincipalController {
 				main.LanzarDialogoInformacion("Su playlist se ha generado correctamente:", f.getPath());
 			}
 		} else
-			main.LanzarDialogoError("No ha añadido ninguna canción a su playlist", "Pulse el boton añadir");
+			main.LanzarDialogoError("No ha añadido ninguna canción a su playlist",
+					"Para añadir música pulse el boton añadir");
 	}
 
 	@FXML
 	private void AccionGenerarIndice() throws IOException {
 		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la música");
-
+		// Process p = Runtime.getRuntime().exec ("vlc");
 		if (f != null) {
 			main.GenerarFicheroIndice(f);
 			main.LanzarDialogoInformacion("Índice generado correctamente:", f.getAbsolutePath());
 		}
+	}
+
+	// TODO Acabar edicion de etiquetas
+	@FXML
+	private void AccionEditarEtiquetas() throws IOException {
+		ObservableList<Musica> listaSeleccionados = musicaTableDir.getSelectionModel().getSelectedItems();
+		if (listaSeleccionados.size() == 1) {
+			main.LanzarDialogoEditar(listaSeleccionados.get(0));
+			musicaTableDir.refresh();
+		} else {
+			main.LanzarDialogoAdvertencia("Ninguna canción del directorio seleccionada",
+					"Debe seleccionar la canción que desee editar");
+		}
+
+	}
+
+	@FXML
+	private void AccionSalir() {
+		Platform.exit();
+
 	}
 
 	private void actualizarNumeroCancionesPlayslist() {

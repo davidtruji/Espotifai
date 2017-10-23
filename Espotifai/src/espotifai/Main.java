@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
-
 import espotifai.model.Musica;
+import espotifai.view.VistaEditarEtiquetasController;
 import espotifai.view.VistaPrincipalController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -14,9 +14,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -74,6 +76,31 @@ public class Main extends Application {
 		return selectedDir;
 	}
 
+	public void LanzarDialogoEditar(Musica cancion) throws IOException {
+		// Load the fxml file and create a new stage for the popup dialog.
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(Main.class.getResource("view/VistaEditarEtiquetas.fxml"));
+		AnchorPane page;
+		page = (AnchorPane) loader.load();
+
+		// Create the dialog Stage.
+		Stage dialogStage = new Stage();
+		dialogStage.setTitle("Espotifai - Editar etiquetas");
+		dialogStage.initModality(Modality.WINDOW_MODAL);
+		dialogStage.initOwner(primaryStage);
+		Scene scene = new Scene(page);
+		dialogStage.setScene(scene);
+
+		// Set the person into the controller.
+		VistaEditarEtiquetasController controller = loader.getController();
+		controller.setDialogStage(dialogStage);
+		controller.setCancion(cancion);
+
+		// Show the dialog and wait until the user closes it
+		dialogStage.showAndWait();
+
+	}
+
 	public File LanzarDialogoGenerar() {
 		FileChooser f = new FileChooser();
 		f.setTitle("Guarde su playlist");
@@ -92,6 +119,7 @@ public class Main extends Application {
 
 	public void GenerarPlaylist(File f) throws IOException {
 		FileWriter writer = new FileWriter(f.getAbsolutePath() + ".m3u");
+		writer.write("#PLAYLIST GENERADA POR ESPOTIFAI" + "\n");
 		for (int i = 0; i < playlist.size(); i++)
 			writer.write(playlist.get(i).getArchivo().getAbsolutePath() + "\n");
 		writer.close();
@@ -123,6 +151,7 @@ public class Main extends Application {
 			return false;
 	}
 
+	// TODO Hacer dialogo de carga y en un nuevo thread
 	public void AnadirMusicaDirectoio(File Dir) {
 		File[] musicaEncontrada = Dir.listFiles();
 		for (int i = 0; i < musicaEncontrada.length; i++) {
@@ -144,8 +173,7 @@ public class Main extends Application {
 	}
 
 	public void GenerarFicheroIndiceR(File f, FileWriter fw, String sep) throws IOException {
-		File[] ficheros;
-		ficheros = f.listFiles();
+		File[] ficheros = f.listFiles();
 		for (int i = 0; i < ficheros.length; i++) {
 			if (esMusica(ficheros[i])) {
 				fw.write(sep + ficheros[i].getName() + "\n");
@@ -164,7 +192,7 @@ public class Main extends Application {
 
 	public void GenerarFicheroIndice(File f) throws IOException {
 		FileWriter writer = new FileWriter(f.getAbsolutePath() + "//Indice_" + fechaActual() + ".txt");
-		writer.write("ÍNDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI");
+		writer.write("ÍNDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + "\n");
 		String sep = "  ";
 		ContadorIndice = 0;
 		tamBiblioteca = 0;
@@ -172,9 +200,9 @@ public class Main extends Application {
 		writer.write("\n\n\n");
 		writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + "\n");
 		if (tamBiblioteca > 1000000000)
-			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÚSICA");
+			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÚSICA" + "\n");
 		else
-			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA");
+			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA" + "\n");
 		writer.close();
 	}
 
