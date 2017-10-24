@@ -32,22 +32,27 @@ public class Musica {
 	public Musica(File file) {
 
 		AudioFile f = null;
+		archivo = file;
+		Artwork art=null;
 		try {
 			f = AudioFileIO.read(file);
 		} catch (CannotReadException | IOException | TagException | ReadOnlyFileException
 				| InvalidAudioFrameException e) {
 			e.printStackTrace();
 		}
-		Tag tag = f.getTag();
-		archivo = file;
-		artista = new SimpleStringProperty(tag.getFirst(FieldKey.ARTIST));
-		titulo = new SimpleStringProperty(tag.getFirst(FieldKey.TITLE));
-		album = new SimpleStringProperty(tag.getFirst(FieldKey.ALBUM));
-		ano = new SimpleStringProperty(tag.getFirst(FieldKey.YEAR));
-		genero = new SimpleStringProperty(tag.getFirst(FieldKey.GENRE));
 
-		// Creacion de la imagen
-		Artwork art = tag.getFirstArtwork();
+		Tag tag = f.getTag();
+
+		if (tag != null) {
+			// TODO BUGS NULL POINTER
+			artista = new SimpleStringProperty(tag.getFirst(FieldKey.ARTIST));
+			titulo = new SimpleStringProperty(tag.getFirst(FieldKey.TITLE));
+			album = new SimpleStringProperty(tag.getFirst(FieldKey.ALBUM));
+			ano = new SimpleStringProperty(tag.getFirst(FieldKey.YEAR));
+			genero = new SimpleStringProperty(tag.getFirst(FieldKey.GENRE));
+			// Creacion de la imagen
+			art = tag.getFirstArtwork();
+		}
 
 		if (art != null) {
 			final byte[] data = art.getBinaryData();
