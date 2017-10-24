@@ -44,7 +44,6 @@ public class Musica {
 		Tag tag = f.getTagOrCreateDefault();
 
 		if (tag != null) {
-			// TODO BUGS NULL POINTER
 			artista = new SimpleStringProperty(tag.getFirst(FieldKey.ARTIST));
 			titulo = new SimpleStringProperty(tag.getFirst(FieldKey.TITLE));
 			album = new SimpleStringProperty(tag.getFirst(FieldKey.ALBUM));
@@ -52,6 +51,7 @@ public class Musica {
 			genero = new SimpleStringProperty(tag.getFirst(FieldKey.GENRE));
 			// Creacion de la imagen
 			art = tag.getFirstArtwork();
+			
 		}
 
 		if (art != null) {

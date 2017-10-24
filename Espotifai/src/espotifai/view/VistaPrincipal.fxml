@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="espotifai.view.VistaPrincipalController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" styleClass="background" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="espotifai.view.VistaPrincipalController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -91,7 +91,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <columns>
-                        <TableColumn fx:id="fichero" prefWidth="75.0" text="Fichero" />
+                        <TableColumn fx:id="FicheroDir" prefWidth="75.0" text="Fichero" />
                         <TableColumn fx:id="ArtistaDir" prefWidth="75.0" text="Artista" />
                         <TableColumn fx:id="TituloDir" prefWidth="75.0" text="Titulo" />
                         <TableColumn fx:id="AlbumDir" prefWidth="75.0" text="Album" />
@@ -137,10 +137,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <columns>
-                        <TableColumn fx:id="Artista" prefWidth="75.0" text="Artista" />
-                        <TableColumn fx:id="Titulo" prefWidth="75.0" text="Título" />
-                        <TableColumn fx:id="Album" prefWidth="75.0" text="Album" />
-                        <TableColumn fx:id="Ano" prefWidth="75.0" text="Año" />
+                        <TableColumn fx:id="Fichero" prefWidth="75.0" text="Fichero" />
                      </columns>
                   </TableView>
                </children>

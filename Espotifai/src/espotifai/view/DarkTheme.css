@@ -1,0 +1,31 @@
+.background {
+    -fx-background-color: #1d1d1d;
+}
+
+.light_background{
+	-fx-background-color: green;	
+}
+
+.label {
+    -fx-text-fill: green;
+}
+
+.button {
+    -fx-background-color: green;
+    -fx-text-fill: black;
+}
+
+.text-field{
+    -fx-background-color: #696969;
+    -fx-text-fill: white;
+}
+
+.table-view{
+    -fx-base: #1d1d1d;
+    -fx-control-inner-background: #1d1d1d;
+    -fx-background-color: #1d1d1d;
+}
+
+.menu-bar{
+	 -fx-background-color: black;	    
+}

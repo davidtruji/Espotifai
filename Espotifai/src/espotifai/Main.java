@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
@@ -93,7 +94,6 @@ public class Main extends Application {
 		controller.setDialogStage(dialogStage);
 		controller.setCancion(cancion);
 		dialogStage.showAndWait();
-
 	}
 
 	public File LanzarDialogoGenerar() {
@@ -200,7 +200,7 @@ public class Main extends Application {
 			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA" + "\n");
 		writer.close();
 	}
-	
+
 	public ObservableList<Musica> getPlaylist() {
 		return playlist;
 	}

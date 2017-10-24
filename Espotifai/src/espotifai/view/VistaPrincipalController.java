@@ -30,7 +30,7 @@ public class VistaPrincipalController {
 	private TableView<Musica> musicaTableDir;
 
 	@FXML
-	private TableColumn<Musica, String> fichero;
+	private TableColumn<Musica, String> FicheroDir;
 	@FXML
 	private TableColumn<Musica, String> ArtistaDir;
 	@FXML
@@ -45,13 +45,7 @@ public class VistaPrincipalController {
 	@FXML
 	private TableView<Musica> musicaTable;
 	@FXML
-	private TableColumn<Musica, String> Artista;
-	@FXML
-	private TableColumn<Musica, String> Titulo;
-	@FXML
-	private TableColumn<Musica, String> Album;
-	@FXML
-	private TableColumn<Musica, String> Ano;
+	private TableColumn<Musica, String> Fichero;
 
 	private Main main;
 
@@ -91,7 +85,8 @@ public class VistaPrincipalController {
 		musicaTableDir.setDisable(true);
 		musicaTableDir.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-		fichero.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArchivo().getName()));
+		FicheroDir
+				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArchivo().getName()));
 		ArtistaDir.setCellValueFactory(cellData -> cellData.getValue().getArtista());
 		TituloDir.setCellValueFactory(cellData -> cellData.getValue().getTitulo());
 		AlbumDir.setCellValueFactory(cellData -> cellData.getValue().getAlbum());
@@ -101,11 +96,7 @@ public class VistaPrincipalController {
 		// Inicializa la tabla de playlist
 		musicaTable.setDisable(true);
 		musicaTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-		Artista.setCellValueFactory(cellData -> cellData.getValue().getArtista());
-		Titulo.setCellValueFactory(cellData -> cellData.getValue().getTitulo());
-		Album.setCellValueFactory(cellData -> cellData.getValue().getAlbum());
-		Ano.setCellValueFactory(cellData -> cellData.getValue().getAno());
+		Fichero.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArchivo().getName()));
 
 	}
 
@@ -130,14 +121,13 @@ public class VistaPrincipalController {
 	@FXML
 	public void AccionSeleccionarDirectorio() {
 
-		main.getMusicaDirectorio().clear();
-
 		File dir = main.LanzarDialogoEleccionDirectorio("Por favor seleccione un directorio");
 
 		if (dir != null) {
 			nombreCarpeta.setVisible(true);
 			nombreCarpeta.setText(dir.getName());
 			rutaSeleccionada.setText(dir.getAbsolutePath());
+			main.getMusicaDirectorio().clear();
 			main.AnadirMusicaDirectoio(dir);
 			numeroCancionesDir.setVisible(true);
 			numeroCancionesDir.setText(Integer.toString(main.getMusicaDirectorio().size()) + " Canciones encontradas");
@@ -226,7 +216,6 @@ public class VistaPrincipalController {
 		}
 	}
 
-	// TODO Acabar edicion de etiquetas
 	@FXML
 	private void AccionEditarEtiquetas() throws IOException {
 		ObservableList<Musica> listaSeleccionados = musicaTableDir.getSelectionModel().getSelectedItems();
