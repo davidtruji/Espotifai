@@ -33,7 +33,7 @@ public class Musica {
 
 		AudioFile f = null;
 		archivo = file;
-		Artwork art=null;
+		Artwork art = null;
 		try {
 			f = AudioFileIO.read(file);
 		} catch (CannotReadException | IOException | TagException | ReadOnlyFileException
@@ -41,7 +41,7 @@ public class Musica {
 			e.printStackTrace();
 		}
 
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 
 		if (tag != null) {
 			// TODO BUGS NULL POINTER
@@ -72,7 +72,7 @@ public class Musica {
 	public void setTagArtista(String Artista) throws CannotReadException, IOException, TagException,
 			ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.setField(FieldKey.ARTIST, Artista);
 		f.commit();
 	}
@@ -86,14 +86,14 @@ public class Musica {
 				| InvalidAudioFrameException e) {
 			e.printStackTrace();
 		}
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		return tag.getFirst(FieldKey.ARTIST);
 	}
 
 	public void BorrarTagArtista() throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.deleteField(FieldKey.ARTIST);
 		f.commit();
 	}
@@ -101,7 +101,7 @@ public class Musica {
 	public void setTagTitulo(String Titulo) throws CannotReadException, IOException, TagException,
 			ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.setField(FieldKey.TITLE, Titulo);
 		f.commit();
 	}
@@ -115,14 +115,14 @@ public class Musica {
 				| InvalidAudioFrameException e) {
 			e.printStackTrace();
 		}
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		return tag.getFirst(FieldKey.TITLE);
 	}
 
 	public void BorrarTagTitulo() throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.deleteField(FieldKey.TITLE);
 		f.commit();
 	}
@@ -130,7 +130,7 @@ public class Musica {
 	public void setTagAlbum(String Album) throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.setField(FieldKey.ALBUM, Album);
 		f.commit();
 	}
@@ -144,14 +144,14 @@ public class Musica {
 				| InvalidAudioFrameException e) {
 			e.printStackTrace();
 		}
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		return tag.getFirst(FieldKey.ALBUM);
 	}
 
 	public void BorrarTagAlbum() throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.deleteField(FieldKey.ALBUM);
 		f.commit();
 	}
@@ -159,7 +159,7 @@ public class Musica {
 	public void setTagAno(String Ano) throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.setField(FieldKey.YEAR, Ano);
 		f.commit();
 	}
@@ -173,14 +173,14 @@ public class Musica {
 				| InvalidAudioFrameException e) {
 			e.printStackTrace();
 		}
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		return tag.getFirst(FieldKey.YEAR);
 	}
 
 	public void BorrarTagAno() throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.deleteField(FieldKey.YEAR);
 		f.commit();
 	}
@@ -188,7 +188,7 @@ public class Musica {
 	public void setTagGenero(String Genero) throws CannotReadException, IOException, TagException,
 			ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.setField(FieldKey.GENRE, Genero);
 		f.commit();
 	}
@@ -202,14 +202,14 @@ public class Musica {
 				| InvalidAudioFrameException e) {
 			e.printStackTrace();
 		}
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		return tag.getFirst(FieldKey.GENRE);
 	}
 
 	public void BorrarTagGenero() throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 		AudioFile f = AudioFileIO.read(archivo);
-		Tag tag = f.getTag();
+		Tag tag = f.getTagOrCreateDefault();
 		tag.deleteField(FieldKey.GENRE);
 		f.commit();
 	}

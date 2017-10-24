@@ -1,23 +1,15 @@
 package espotifai.view;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
-
-import espotifai.Main;
 import espotifai.model.Musica;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
@@ -46,12 +38,43 @@ public class VistaEditarEtiquetasController {
 
 	public void setCancion(Musica cancion) throws IOException {
 		this.cancion = cancion;
-		Artista.setText(cancion.getArtista().get());
-		Titulo.setText(cancion.getTitulo().get());
-		Album.setText(cancion.getAlbum().get());
-		Ano.setText(cancion.getAno().get());
-		Genero.setText(cancion.getGenero().get());
-		caratula.setImage(cancion.getCaratula());
+
+		try {
+			Artista.setText(cancion.getArtista().get());
+		} catch (Exception e) {
+			Artista.setText("");
+		}
+
+		try {
+			Titulo.setText(cancion.getTitulo().get());
+		} catch (Exception e) {
+			Titulo.setText("");
+		}
+
+		try {
+			Album.setText(cancion.getAlbum().get());
+		} catch (Exception e) {
+			Album.setText("");
+		}
+
+		try {
+			Ano.setText(cancion.getAno().get());
+		} catch (Exception e) {
+			Ano.setText("");
+		}
+
+		try {
+			Genero.setText(cancion.getGenero().get());
+		} catch (Exception e) {
+			Genero.setText("");
+		}
+
+		try {
+			caratula.setImage(cancion.getCaratula());
+		} catch (Exception e) {
+			System.out.println("NO COVER FIND");
+		}
+
 	}
 
 	public Musica getCancion() {
