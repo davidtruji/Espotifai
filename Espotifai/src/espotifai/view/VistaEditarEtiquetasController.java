@@ -1,6 +1,10 @@
 package espotifai.view;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -8,10 +12,13 @@ import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
 
+import espotifai.Main;
 import espotifai.model.Musica;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class VistaEditarEtiquetasController {
@@ -26,6 +33,8 @@ public class VistaEditarEtiquetasController {
 	private TextField Ano;
 	@FXML
 	private TextField Genero;
+	@FXML
+	private ImageView caratula;
 
 	private Stage dialogStage;
 	private Musica cancion;
@@ -35,13 +44,14 @@ public class VistaEditarEtiquetasController {
 
 	}
 
-	public void setCancion(Musica cancion) {
+	public void setCancion(Musica cancion) throws IOException {
 		this.cancion = cancion;
 		Artista.setText(cancion.getArtista().get());
 		Titulo.setText(cancion.getTitulo().get());
 		Album.setText(cancion.getAlbum().get());
 		Ano.setText(cancion.getAno().get());
 		Genero.setText(cancion.getGenero().get());
+		caratula.setImage(cancion.getCaratula());
 	}
 
 	public Musica getCancion() {
@@ -115,9 +125,25 @@ public class VistaEditarEtiquetasController {
 		else
 			cancion.BorrarTagAlbum();
 
-		if (!Ano.getText().isEmpty())
-			cancion.setTagAno(Ano.getText());
-		else
+		if (!Ano.getText().isEmpty()) {
+
+			try {
+				Integer.parseInt(Ano.getText());
+				if (Integer.valueOf(Ano.getText()) > 1000 && Integer.valueOf(Ano.getText()) < 3000) {
+					cancion.setTagAno(Ano.getText());
+				} else {
+					// Main.LanzarDialogoError("El año introducido es incorrecto", "No se etiquetará
+					// el año");
+
+				}
+			} catch (NumberFormatException e) {
+
+				// Main.LanzarDialogoError("El año introducido es incorrecto", "No se etiquetará
+				// el año");
+
+			}
+
+		} else
 			cancion.BorrarTagAno();
 
 		if (!Genero.getText().isEmpty())

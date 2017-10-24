@@ -77,26 +77,21 @@ public class Main extends Application {
 	}
 
 	public void LanzarDialogoEditar(Musica cancion) throws IOException {
-		// Load the fxml file and create a new stage for the popup dialog.
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("view/VistaEditarEtiquetas.fxml"));
 		AnchorPane page;
 		page = (AnchorPane) loader.load();
 
-		// Create the dialog Stage.
 		Stage dialogStage = new Stage();
+		dialogStage.setResizable(false);
 		dialogStage.setTitle("Espotifai - Editar etiquetas");
 		dialogStage.initModality(Modality.WINDOW_MODAL);
 		dialogStage.initOwner(primaryStage);
 		Scene scene = new Scene(page);
 		dialogStage.setScene(scene);
-
-		// Set the person into the controller.
 		VistaEditarEtiquetasController controller = loader.getController();
 		controller.setDialogStage(dialogStage);
 		controller.setCancion(cancion);
-
-		// Show the dialog and wait until the user closes it
 		dialogStage.showAndWait();
 
 	}
@@ -205,7 +200,7 @@ public class Main extends Application {
 			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA" + "\n");
 		writer.close();
 	}
-
+	
 	public ObservableList<Musica> getPlaylist() {
 		return playlist;
 	}

@@ -1,5 +1,6 @@
 package espotifai.model;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,9 +13,11 @@ import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.images.Artwork;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.image.Image;
 
 public class Musica {
 
@@ -24,19 +27,18 @@ public class Musica {
 	private StringProperty album;
 	private StringProperty ano;
 	private StringProperty genero;
+	private Image caratula;
 
 	public Musica(File file) {
 
 		AudioFile f = null;
 		try {
 			f = AudioFileIO.read(file);
-
 		} catch (CannotReadException | IOException | TagException | ReadOnlyFileException
 				| InvalidAudioFrameException e) {
 			e.printStackTrace();
 		}
 		Tag tag = f.getTag();
-
 		archivo = file;
 		artista = new SimpleStringProperty(tag.getFirst(FieldKey.ARTIST));
 		titulo = new SimpleStringProperty(tag.getFirst(FieldKey.TITLE));
@@ -44,6 +46,22 @@ public class Musica {
 		ano = new SimpleStringProperty(tag.getFirst(FieldKey.YEAR));
 		genero = new SimpleStringProperty(tag.getFirst(FieldKey.GENRE));
 
+		// Creacion de la imagen
+		Artwork art = tag.getFirstArtwork();
+
+		if (art != null) {
+			final byte[] data = art.getBinaryData();
+			ByteArrayInputStream bytes = new ByteArrayInputStream(data);
+			caratula = new Image(bytes);
+		}
+	}
+
+	public Image getCaratula() {
+		return caratula;
+	}
+
+	public void setCaratula(Image caratula) {
+		this.caratula = caratula;
 	}
 
 	public void setTagArtista(String Artista) throws CannotReadException, IOException, TagException,

@@ -2,9 +2,6 @@ package espotifai.view;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.jaudiotagger.logging.PlainTextTagDisplayFormatter;
-
 import espotifai.Main;
 import espotifai.model.Musica;
 import javafx.application.Platform;
@@ -90,7 +87,6 @@ public class VistaPrincipalController {
 			}
 		});
 
-		// TODO Añadir más informacion a la tabla
 		// Inicializa la tabla de directorio
 		musicaTableDir.setDisable(true);
 		musicaTableDir.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -224,7 +220,6 @@ public class VistaPrincipalController {
 	@FXML
 	private void AccionGenerarIndice() throws IOException {
 		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la música");
-		// Process p = Runtime.getRuntime().exec ("vlc");
 		if (f != null) {
 			main.GenerarFicheroIndice(f);
 			main.LanzarDialogoInformacion("Índice generado correctamente:", f.getAbsolutePath());
