@@ -30,7 +30,7 @@ public class Main extends Application {
 	private float tamBiblioteca = 0;
 	private ObservableList<Musica> playlist = FXCollections.observableArrayList();
 	private ObservableList<Musica> musicaDirectorio = FXCollections.observableArrayList();
-
+	
 	public ObservableList<Musica> getMusicaDirectorio() {
 		return musicaDirectorio;
 	}

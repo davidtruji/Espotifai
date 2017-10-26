@@ -49,9 +49,10 @@ public class Musica {
 			album = new SimpleStringProperty(tag.getFirst(FieldKey.ALBUM));
 			ano = new SimpleStringProperty(tag.getFirst(FieldKey.YEAR));
 			genero = new SimpleStringProperty(tag.getFirst(FieldKey.GENRE));
+
 			// Creacion de la imagen
 			art = tag.getFirstArtwork();
-			
+
 		}
 
 		if (art != null) {

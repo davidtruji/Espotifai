@@ -70,9 +70,10 @@ public class VistaEditarEtiquetasController {
 		}
 
 		try {
-			//caratula.setImage(cancion.getCaratula().);
+			if (cancion.getCaratula() != null)
+				caratula.setImage(cancion.getCaratula());
 		} catch (Exception e) {
-			System.out.println("NO COVER FIND");
+			// System.out.println("NO COVER FIND");
 		}
 
 	}

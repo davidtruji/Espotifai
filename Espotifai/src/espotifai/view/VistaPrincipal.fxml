@@ -70,7 +70,7 @@
                      <children>
                         <Label fx:id="nombreCarpeta" text="Dir" textFill="RED">
                            <font>
-                              <Font name="Ubuntu Bold Italic" size="20.0" />
+                              <Font name="System Bold" size="20.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="5.0" left="10.0" top="5.0" />
@@ -78,7 +78,7 @@
                         </Label>
                         <Label fx:id="numeroCancionesDir" text="0">
                            <font>
-                              <Font name="Ubuntu" size="20.0" />
+                              <Font size="20.0" />
                            </font>
                         </Label>
                      </children>
@@ -93,8 +93,8 @@
                      <columns>
                         <TableColumn fx:id="FicheroDir" prefWidth="75.0" text="Fichero" />
                         <TableColumn fx:id="ArtistaDir" prefWidth="75.0" text="Artista" />
-                        <TableColumn fx:id="TituloDir" prefWidth="75.0" text="Titulo" />
-                        <TableColumn fx:id="AlbumDir" prefWidth="75.0" text="Album" />
+                        <TableColumn fx:id="TituloDir" prefWidth="75.0" text="Título" />
+                        <TableColumn fx:id="AlbumDir" prefWidth="75.0" text="Álbum" />
                         <TableColumn fx:id="AnoDir" prefWidth="75.0" text="Año" />
                         <TableColumn fx:id="GeneroDir" prefWidth="75.0" text="Género" />
                      </columns>
@@ -116,7 +116,7 @@
                      <children>
                         <Label alignment="TOP_LEFT" text="Playlist" textFill="RED">
                            <font>
-                              <Font name="Ubuntu Bold Italic" size="20.0" />
+                              <Font name="System Bold" size="20.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="5.0" left="10.0" top="5.0" />
@@ -124,7 +124,7 @@
                         </Label>
                         <Label fx:id="numeroCanciones" text="0 Canciones">
                            <font>
-                              <Font name="Ubuntu" size="20.0" />
+                              <Font size="20.0" />
                            </font>
                         </Label>
                      </children>
