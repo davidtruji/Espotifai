@@ -27,6 +27,7 @@ public class Musica {
 	private StringProperty album;
 	private StringProperty ano;
 	private StringProperty genero;
+	private String tasaBits;
 	private Image caratula;
 
 	public Musica(File file) {
@@ -40,7 +41,6 @@ public class Musica {
 				| InvalidAudioFrameException e) {
 			e.printStackTrace();
 		}
-
 		Tag tag = f.getTagOrCreateDefault();
 
 		if (tag != null) {
@@ -49,6 +49,7 @@ public class Musica {
 			album = new SimpleStringProperty(tag.getFirst(FieldKey.ALBUM));
 			ano = new SimpleStringProperty(tag.getFirst(FieldKey.YEAR));
 			genero = new SimpleStringProperty(tag.getFirst(FieldKey.GENRE));
+			tasaBits=f.getAudioHeader().getBitRate();
 
 			// Creacion de la imagen
 			art = tag.getFirstArtwork();
@@ -60,6 +61,14 @@ public class Musica {
 			ByteArrayInputStream bytes = new ByteArrayInputStream(data);
 			caratula = new Image(bytes);
 		}
+	}
+
+	public String getTasaBits() {
+		return tasaBits;
+	}
+
+	public void setTasaBits(String tasaBits) {
+		this.tasaBits = tasaBits;
 	}
 
 	public Image getCaratula() {

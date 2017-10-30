@@ -30,7 +30,7 @@ public class Main extends Application {
 	private float tamBiblioteca = 0;
 	private ObservableList<Musica> playlist = FXCollections.observableArrayList();
 	private ObservableList<Musica> musicaDirectorio = FXCollections.observableArrayList();
-	
+
 	public ObservableList<Musica> getMusicaDirectorio() {
 		return musicaDirectorio;
 	}
@@ -150,8 +150,11 @@ public class Main extends Application {
 	public void AnadirMusicaDirectoio(File Dir) {
 		File[] musicaEncontrada = Dir.listFiles();
 		for (int i = 0; i < musicaEncontrada.length; i++) {
-			if (esMusica(musicaEncontrada[i]))
-				musicaDirectorio.add(new Musica(musicaEncontrada[i]));
+			if (esMusica(musicaEncontrada[i])) {
+				Musica m = new Musica(musicaEncontrada[i]);
+				musicaDirectorio.add(m);
+				//System.out.println(m.getTitulo().toString() + " - " + m.getTasaBits());
+			}
 		}
 	}
 
@@ -171,7 +174,8 @@ public class Main extends Application {
 		File[] ficheros = f.listFiles();
 		for (int i = 0; i < ficheros.length; i++) {
 			if (esMusica(ficheros[i])) {
-				fw.write(sep + ficheros[i].getName() + "\n");
+				Musica m = new Musica(ficheros[i]);
+				fw.write(sep + "[" + m.getTasaBits() + " kbps] " + ficheros[i].getName() + "\n");
 				ContadorIndice++;
 				tamBiblioteca = tamBiblioteca + ficheros[i].length();
 			} else if (ficheros[i].isDirectory()) {
