@@ -4,6 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.TagException;
+
 import espotifai.model.Musica;
 import espotifai.view.VistaEditarEtiquetasController;
 import espotifai.view.VistaPrincipalController;
@@ -172,12 +179,6 @@ public class Main extends Application {
 		}
 	}
 	
-	public void CambiarCaratula() {
-		File imagen=null;
-		ExtensionFilter filter= new ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg");
-		imagen=LanzarDialogoEleccionArchivo("Espotifai - Seleción de carátula", filter);
-		System.out.println("IMAGEN: "+imagen.getAbsolutePath());
-	}
 	
 	
 

@@ -1,5 +1,7 @@
 package espotifai.view;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -11,8 +13,10 @@ import espotifai.model.Musica;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class VistaEditarEtiquetasController {
 
@@ -28,12 +32,12 @@ public class VistaEditarEtiquetasController {
 	private TextField Genero;
 	@FXML
 	private ImageView caratula;
-	@FXML
-	private Label ClickCaratula;
 
 	private Stage dialogStage;
 	private Musica cancion;
-	private Main main=new Main();
+	private Main main = new Main();
+	private boolean caratulaCambiada = false;
+	private File imagenCaratula = null;
 
 	@FXML
 	private void initialize() {
@@ -84,11 +88,9 @@ public class VistaEditarEtiquetasController {
 		try {
 			if (cancion.getCaratula() != null) {
 				caratula.setImage(cancion.getCaratula());
-			
-			
+
 			}
 		} catch (Exception e) {
-			// System.out.println("NO COVER FIND");
 		}
 
 	}
@@ -146,10 +148,14 @@ public class VistaEditarEtiquetasController {
 	}
 
 	@FXML
-	public void AccionSeleccionarCaratula() {
-		//TODO Acabar etiqutar caratula
-		System.out.println("VistaEditarEtiquetasController.AccionSeleccionarCaratula()");
-		main.CambiarCaratula();
+	public void AccionSeleccionarCaratula() throws CannotReadException, IOException, TagException,
+			ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
+		ExtensionFilter filter = new ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg");
+		imagenCaratula = main.LanzarDialogoEleccionArchivo("Espotifai - Seleción de carátula", filter);
+		if (imagenCaratula != null) {
+			caratula.setImage(new Image("file:" + imagenCaratula.getAbsolutePath()));
+			caratulaCambiada = true;
+		}
 	}
 
 	@FXML
@@ -196,6 +202,10 @@ public class VistaEditarEtiquetasController {
 			cancion.setTagGenero(Genero.getText());
 		else
 			cancion.BorrarTagGenero();
+
+		if (imagenCaratula != null) {
+			cancion.setCaratula(imagenCaratula);
+		}
 
 		cancion.setArtista(cancion.getTagArtista());
 		cancion.setTitulo(cancion.getTagTitulo());

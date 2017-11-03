@@ -1,8 +1,11 @@
 package espotifai.model;
 
+import java.awt.image.ImageProducer;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -13,9 +16,11 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.Artwork;
+import org.jaudiotagger.tag.images.ArtworkFactory;
+
 import javafx.scene.image.Image;
 
-public class Musica extends AudioFile{
+public class Musica {
 
 	File archivo;
 	private String artista;
@@ -45,7 +50,7 @@ public class Musica extends AudioFile{
 			album = tag.getFirst(FieldKey.ALBUM);
 			ano = tag.getFirst(FieldKey.YEAR);
 			genero = tag.getFirst(FieldKey.GENRE);
-			tasaBits=f.getAudioHeader().getBitRate();
+			tasaBits = f.getAudioHeader().getBitRate();
 
 			// Creacion de la imagen
 			art = tag.getFirstArtwork();
@@ -71,8 +76,22 @@ public class Musica extends AudioFile{
 		return caratula;
 	}
 
-	public void setCaratula(Image caratula) {
-		this.caratula = caratula;
+	public void setCaratula(File cover)
+			throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
+
+		
+		Artwork a = ArtworkFactory.createArtworkFromFile(cover);
+		AudioFile f = AudioFileIO.read(archivo);
+		Tag tag = f.getTagOrCreateDefault();
+		tag.deleteArtworkField();
+		tag.setField(a);
+		f.commit();
+		
+		final byte[] data = a.getBinaryData();
+		ByteArrayInputStream bytes = new ByteArrayInputStream(data);
+		caratula = new Image(bytes);
+		
+
 	}
 
 	public void setTagArtista(String Artista) throws CannotReadException, IOException, TagException,
