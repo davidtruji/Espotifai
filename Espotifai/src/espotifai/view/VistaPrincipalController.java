@@ -16,6 +16,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * 
+ * Espotifai
+ * 
+ * @Fichero: VistaPrincipalController.java
+ * @Autor: David Trujillo Torres
+ * @Fecha: 3 nov. 2017
+ */
 public class VistaPrincipalController {
 
 	@FXML
@@ -49,6 +57,191 @@ public class VistaPrincipalController {
 
 	private Main main;
 
+	/**
+	 * Ajusta la informacion del main principal en el del controlador
+	 * 
+	 * @param main
+	 *            Instancia Main
+	 */
+	public void setMain(Main main) {
+		this.main = main;
+
+		// Añade las canciones a la tabla playlist
+		musicaTableDir.setItems(main.getMusicaDirectorio());
+
+		// Añade las canciones a la tabla playlist
+		musicaTable.setItems(main.getPlaylist());
+
+	}
+
+	/**
+	 * Accion que elimina todas las canciones de una playlist
+	 */
+	@FXML
+	public void AccionLimpiarPlaylist() {
+		main.getPlaylist().clear();
+		actualizarNumeroCancionesPlayslist();
+		musicaTable.setDisable(true);
+	}
+
+	/**
+	 * Accion para elegir un directorio en el que buscar musica
+	 */
+	@FXML
+	public void AccionSeleccionarDirectorio() {
+
+		File dir = main.LanzarDialogoEleccionDirectorio("Por favor seleccione un directorio");
+
+		if (dir != null) {
+			nombreCarpeta.setVisible(true);
+			nombreCarpeta.setText(dir.getName());
+			rutaSeleccionada.setText(dir.getAbsolutePath());
+			main.getMusicaDirectorio().clear();
+			main.AnadirMusicaDirectoio(dir);
+			numeroCancionesDir.setVisible(true);
+			numeroCancionesDir.setText(Integer.toString(main.getMusicaDirectorio().size()) + " Canciones encontradas");
+			musicaTableDir.setDisable(false);
+		}
+	}
+
+	/**
+	 * Accion de añadir toda la musica de un directorio en una playlist
+	 */
+	@FXML
+	public void AcccionAnadirTodo() {
+		boolean rep = false;
+		ObservableList<Musica> listaSeleccionados = musicaTableDir.getItems();
+
+		for (int i = 0; i < listaSeleccionados.size(); i++) {
+			if (!musicaTable.getItems().contains(listaSeleccionados.get(i))) {
+				musicaTable.getItems().add(listaSeleccionados.get(i));
+			} else {
+				rep = true;
+			}
+
+		}
+
+		if (rep)
+			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
+					" Estas canciones no se añarirán...");
+
+		actualizarNumeroCancionesPlayslist();
+
+		if (main.getPlaylist().size() > 0)
+			musicaTable.setDisable(false);
+
+	}
+
+	/**
+	 * Accion de borrar una cancion de la playlist
+	 */
+	@FXML
+	public void AcccionQuitar() {
+
+		musicaTable.getItems().removeAll(musicaTable.getSelectionModel().getSelectedItems());
+		actualizarNumeroCancionesPlayslist();
+
+		if (main.getPlaylist().size() == 0)
+			musicaTable.setDisable(true);
+	}
+
+	/**
+	 * Accion que añade la musica seleccionada de un directorio a una playlist
+	 */
+	@FXML
+	public void AccionAnadirMusicaAPlaylist() {
+		boolean rep = false;
+		ObservableList<Musica> listaSeleccionados = musicaTableDir.getSelectionModel().getSelectedItems();
+
+		for (int i = 0; i < listaSeleccionados.size(); i++) {
+			if (!musicaTable.getItems().contains(listaSeleccionados.get(i))) {
+				musicaTable.getItems().add(listaSeleccionados.get(i));
+			} else {
+				rep = true;
+			}
+
+		}
+
+		if (rep)
+			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
+					" Estas canciones no se añarirán...");
+
+		actualizarNumeroCancionesPlayslist();
+
+		if (main.getPlaylist().size() > 0)
+			musicaTable.setDisable(false);
+	}
+
+	/**
+	 * Accion de generar la playlist creada
+	 * 
+	 * @throws IOException
+	 */
+	@FXML
+	void AccionGenerarPlaylist() throws IOException {
+		if (!main.getPlaylist().isEmpty()) {
+			File f = main.LanzarDialogoGenerar();
+			if (f != null) {
+				main.GenerarPlaylist(f);
+				main.LanzarDialogoInformacion("Su playlist se ha generado correctamente:", f.getPath());
+			}
+		} else
+			main.LanzarDialogoError("No ha añadido ninguna canción a su playlist",
+					"Para añadir música pulse el boton añadir");
+	}
+
+	/**
+	 * Accion de generar indice
+	 * 
+	 * @throws IOException
+	 */
+	@FXML
+	private void AccionGenerarIndice() throws IOException {
+		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la música");
+		if (f != null) {
+			main.GenerarFicheroIndice(f);
+			main.LanzarDialogoInformacion("Índice generado correctamente:", f.getAbsolutePath());
+		}
+	}
+
+	/**
+	 * Accion de editar etiquetas de una cancion seleccionada
+	 * 
+	 * @throws IOException
+	 */
+	@FXML
+	private void AccionEditarEtiquetas() throws IOException {
+		ObservableList<Musica> listaSeleccionados = musicaTableDir.getSelectionModel().getSelectedItems();
+		if (listaSeleccionados.size() == 1) {
+			main.LanzarDialogoEditar(listaSeleccionados.get(0));
+			musicaTableDir.refresh();
+		} else {
+			main.LanzarDialogoAdvertencia("Ninguna canción del directorio seleccionada",
+					"Debe seleccionar la canción que desee editar");
+		}
+
+	}
+
+	/**
+	 * Accion de salir del programa y cerrarlo por completo
+	 */
+	@FXML
+	private void AccionSalir() {
+		Platform.exit();
+
+	}
+
+	/**
+	 * Metodo que actualiza el contador de canciones de playlist
+	 */
+	private void actualizarNumeroCancionesPlayslist() {
+		numeroCanciones.setText(Integer.toString(main.getPlaylist().size()) + " Canciones");
+	}
+
+	/**
+	 * Acciones que se ejecutan automaticamente al generar el controlador de la
+	 * vista principal
+	 */
 	@FXML
 	private void initialize() {
 		rutaSeleccionada.setDisable(true);
@@ -98,145 +291,6 @@ public class VistaPrincipalController {
 		musicaTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		Fichero.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArchivo().getName()));
 
-	}
-
-	public void setMain(Main main) {
-		this.main = main;
-
-		// Añade las canciones a la tabla playlist
-		musicaTableDir.setItems(main.getMusicaDirectorio());
-
-		// Añade las canciones a la tabla playlist
-		musicaTable.setItems(main.getPlaylist());
-
-	}
-
-	@FXML
-	public void AccionLimpiarPlaylist() {
-		main.getPlaylist().clear();
-		actualizarNumeroCancionesPlayslist();
-		musicaTable.setDisable(true);
-	}
-
-	@FXML
-	public void AccionSeleccionarDirectorio() {
-
-		File dir = main.LanzarDialogoEleccionDirectorio("Por favor seleccione un directorio");
-
-		if (dir != null) {
-			nombreCarpeta.setVisible(true);
-			nombreCarpeta.setText(dir.getName());
-			rutaSeleccionada.setText(dir.getAbsolutePath());
-			main.getMusicaDirectorio().clear();
-			main.AnadirMusicaDirectoio(dir);
-			numeroCancionesDir.setVisible(true);
-			numeroCancionesDir.setText(Integer.toString(main.getMusicaDirectorio().size()) + " Canciones encontradas");
-			musicaTableDir.setDisable(false);
-		}
-	}
-
-	@FXML
-	public void AcccionAnadirTodo() {
-		boolean rep = false;
-		ObservableList<Musica> listaSeleccionados = musicaTableDir.getItems();
-
-		for (int i = 0; i < listaSeleccionados.size(); i++) {
-			if (!musicaTable.getItems().contains(listaSeleccionados.get(i))) {
-				musicaTable.getItems().add(listaSeleccionados.get(i));
-			} else {
-				rep = true;
-			}
-
-		}
-
-		if (rep)
-			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
-					" Estas canciones no se añarirán...");
-
-		actualizarNumeroCancionesPlayslist();
-
-		if (main.getPlaylist().size() > 0)
-			musicaTable.setDisable(false);
-
-	}
-
-	@FXML
-	public void AcccionQuitar() {
-
-		musicaTable.getItems().removeAll(musicaTable.getSelectionModel().getSelectedItems());
-		actualizarNumeroCancionesPlayslist();
-
-		if (main.getPlaylist().size() == 0)
-			musicaTable.setDisable(true);
-	}
-
-	@FXML
-	public void AccionAnadirMusicaAPlaylist() {
-		boolean rep = false;
-		ObservableList<Musica> listaSeleccionados = musicaTableDir.getSelectionModel().getSelectedItems();
-
-		for (int i = 0; i < listaSeleccionados.size(); i++) {
-			if (!musicaTable.getItems().contains(listaSeleccionados.get(i))) {
-				musicaTable.getItems().add(listaSeleccionados.get(i));
-			} else {
-				rep = true;
-			}
-
-		}
-
-		if (rep)
-			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
-					" Estas canciones no se añarirán...");
-
-		actualizarNumeroCancionesPlayslist();
-
-		if (main.getPlaylist().size() > 0)
-			musicaTable.setDisable(false);
-	}
-
-	@FXML
-	void AccionGenerarPlaylist() throws IOException {
-		if (!main.getPlaylist().isEmpty()) {
-			File f = main.LanzarDialogoGenerar();
-			if (f != null) {
-				main.GenerarPlaylist(f);
-				main.LanzarDialogoInformacion("Su playlist se ha generado correctamente:", f.getPath());
-			}
-		} else
-			main.LanzarDialogoError("No ha añadido ninguna canción a su playlist",
-					"Para añadir música pulse el boton añadir");
-	}
-
-	@FXML
-	private void AccionGenerarIndice() throws IOException {
-		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la música");
-		if (f != null) {
-			main.GenerarFicheroIndice(f);
-			main.LanzarDialogoInformacion("Índice generado correctamente:", f.getAbsolutePath());
-		}
-	}
-
-	@FXML
-	private void AccionEditarEtiquetas() throws IOException {
-		ObservableList<Musica> listaSeleccionados = musicaTableDir.getSelectionModel().getSelectedItems();
-		if (listaSeleccionados.size() == 1) {
-			main.LanzarDialogoEditar(listaSeleccionados.get(0));
-			musicaTableDir.refresh();
-		} else {
-			main.LanzarDialogoAdvertencia("Ninguna canción del directorio seleccionada",
-					"Debe seleccionar la canción que desee editar");
-		}
-
-	}
-
-	@FXML
-	private void AccionSalir() {
-		Platform.exit();
-
-	}
-
-	private void actualizarNumeroCancionesPlayslist() {
-		numeroCanciones.setText(Integer.toString(main.getPlaylist().size()) + " Canciones");
 	}
 
 }

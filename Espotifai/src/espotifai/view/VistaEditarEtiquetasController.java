@@ -1,6 +1,5 @@
 package espotifai.view;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -11,13 +10,20 @@ import org.jaudiotagger.tag.TagException;
 import espotifai.Main;
 import espotifai.model.Musica;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+/**
+ * 
+ * Espotifai
+ * 
+ * @Fichero: VistaEditarEtiquetasController.java
+ * @Autor: David Trujillo Torres
+ * @Fecha: 3 nov. 2017
+ */
 public class VistaEditarEtiquetasController {
 
 	@FXML
@@ -36,22 +42,28 @@ public class VistaEditarEtiquetasController {
 	private Stage dialogStage;
 	private Musica cancion;
 	private Main main = new Main();
+	@SuppressWarnings("unused")
 	private boolean caratulaCambiada = false;
 	private File imagenCaratula = null;
 
-	@FXML
-	private void initialize() {
-
+	/**
+	 * Ajusta el Stage
+	 * 
+	 * @param dialogStage2
+	 *            Tipo Stage que genera este dialogo
+	 */
+	public void setDialogStage(Stage dialogStage2) {
+		dialogStage = dialogStage2;
 	}
 
-	public Main getMain() {
-		return main;
-	}
-
-	public void setMain(Main main) {
-		this.main = main;
-	}
-
+	/**
+	 * Configura la informacion de la cancion de la que se van a editar las
+	 * etiquetas
+	 * 
+	 * @param cancion
+	 *            Tipo Musica con la cancion a editar
+	 * @throws IOException
+	 */
 	public void setCancion(Musica cancion) throws IOException {
 		this.cancion = cancion;
 
@@ -95,58 +107,17 @@ public class VistaEditarEtiquetasController {
 
 	}
 
-	public Musica getCancion() {
-		return cancion;
-	}
-
-	public Stage getDialogStage() {
-		return dialogStage;
-	}
-
-	public TextField getArtista() {
-		return Artista;
-	}
-
-	public void setArtista(TextField artista) {
-		Artista = artista;
-	}
-
-	public TextField getTitulo() {
-		return Titulo;
-	}
-
-	public void setTitulo(TextField titulo) {
-		Titulo = titulo;
-	}
-
-	public TextField getAlbum() {
-		return Album;
-	}
-
-	public void setAlbum(TextField album) {
-		Album = album;
-	}
-
-	public TextField getAno() {
-		return Ano;
-	}
-
-	public void setAno(TextField ano) {
-		Ano = ano;
-	}
-
-	public TextField getGenero() {
-		return Genero;
-	}
-
-	public void setGenero(TextField genero) {
-		Genero = genero;
-	}
-
-	public void setDialogStage(Stage dialogStage) {
-		this.dialogStage = dialogStage;
-	}
-
+	/**
+	 * Accion de elegir cartaula, lanza un dialogo de seleccion de imagen y la pone
+	 * en el objeto Musica
+	 * 
+	 * @throws CannotReadException
+	 * @throws IOException
+	 * @throws TagException
+	 * @throws ReadOnlyFileException
+	 * @throws InvalidAudioFrameException
+	 * @throws CannotWriteException
+	 */
 	@FXML
 	public void AccionSeleccionarCaratula() throws CannotReadException, IOException, TagException,
 			ReadOnlyFileException, InvalidAudioFrameException, CannotWriteException {
@@ -158,22 +129,32 @@ public class VistaEditarEtiquetasController {
 		}
 	}
 
+	/**
+	 * Accion de editar todas las etiquetas de la cancion que han sido modificadas
+	 * 
+	 * @throws CannotReadException
+	 * @throws IOException
+	 * @throws TagException
+	 * @throws ReadOnlyFileException
+	 * @throws InvalidAudioFrameException
+	 * @throws CannotWriteException
+	 */
 	@FXML
 	public void AccionEditarEtiqutas() throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 
 		if (!Artista.getText().isEmpty())
-			cancion.setTagArtista(Artista.getText());
+			cancion.setArtista(Artista.getText());
 		else
 			cancion.BorrarTagArtista();
 
 		if (!Titulo.getText().isEmpty())
-			cancion.setTagTitulo(Titulo.getText());
+			cancion.setTitulo(Titulo.getText());
 		else
 			cancion.BorrarTagTitulo();
 
 		if (!Album.getText().isEmpty())
-			cancion.setTagAlbum(Album.getText());
+			cancion.setAlbum(Album.getText());
 		else
 			cancion.BorrarTagAlbum();
 
@@ -182,16 +163,11 @@ public class VistaEditarEtiquetasController {
 			try {
 				Integer.parseInt(Ano.getText());
 				if (Integer.valueOf(Ano.getText()) > 1000 && Integer.valueOf(Ano.getText()) < 3000) {
-					cancion.setTagAno(Ano.getText());
+					cancion.setAno(Ano.getText());
 				} else {
-					// Main.LanzarDialogoError("El año introducido es incorrecto", "No se etiquetará
-					// el año");
 
 				}
 			} catch (NumberFormatException e) {
-
-				// Main.LanzarDialogoError("El año introducido es incorrecto", "No se etiquetará
-				// el año");
 
 			}
 
@@ -199,7 +175,7 @@ public class VistaEditarEtiquetasController {
 			cancion.BorrarTagAno();
 
 		if (!Genero.getText().isEmpty())
-			cancion.setTagGenero(Genero.getText());
+			cancion.setGenero(Genero.getText());
 		else
 			cancion.BorrarTagGenero();
 
@@ -207,14 +183,12 @@ public class VistaEditarEtiquetasController {
 			cancion.setCaratula(imagenCaratula);
 		}
 
-		cancion.setArtista(cancion.getTagArtista());
-		cancion.setTitulo(cancion.getTagTitulo());
-		cancion.setAlbum(cancion.getTagAlbum());
-		cancion.setAno(cancion.getTagAno());
-		cancion.setGenero(cancion.getTagGenero());
 		dialogStage.close();
 	}
 
+	/**
+	 * Limpia todos los textFields de la ventana
+	 */
 	@FXML
 	public void AccionLimpiarCampos() {
 		Artista.clear();
@@ -224,6 +198,9 @@ public class VistaEditarEtiquetasController {
 		Genero.clear();
 	}
 
+	/**
+	 * Accion de cancelar, Cierra el dialogo
+	 */
 	@FXML
 	public void AccionCancelar() {
 		dialogStage.close();

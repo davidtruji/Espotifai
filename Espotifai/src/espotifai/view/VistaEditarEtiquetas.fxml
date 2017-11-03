@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
@@ -15,7 +16,7 @@
          <children>
             <StackPane>
                <children>
-                  <ImageView fx:id="caratula" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#AccionSeleccionarCaratula" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="caratula" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#AccionSeleccionarCaratula" pickOnBounds="true">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
@@ -23,10 +24,13 @@
                         <Image url="@../../../recursos/imagenes/Espotifai_Cover.png" />
                      </image>
                   </ImageView>
-                  <Label onMouseClicked="#AccionSeleccionarCaratula" text="Click para cambiar..." StackPane.alignment="CENTER">
+                  <Label onMouseClicked="#AccionSeleccionarCaratula" text="Click para cambiar..." StackPane.alignment="TOP_CENTER">
                      <StackPane.margin>
-                        <Insets top="80.0" />
+                        <Insets top="20.0" />
                      </StackPane.margin>
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
                   </Label>
                </children>
             </StackPane>
