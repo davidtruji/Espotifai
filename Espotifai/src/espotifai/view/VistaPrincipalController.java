@@ -87,11 +87,11 @@ public class VistaPrincipalController {
 
 		FicheroDir
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArchivo().getName()));
-		ArtistaDir.setCellValueFactory(cellData -> cellData.getValue().getArtista());
-		TituloDir.setCellValueFactory(cellData -> cellData.getValue().getTitulo());
-		AlbumDir.setCellValueFactory(cellData -> cellData.getValue().getAlbum());
-		AnoDir.setCellValueFactory(cellData -> cellData.getValue().getAno());
-		GeneroDir.setCellValueFactory(cellData -> cellData.getValue().getGenero());
+		ArtistaDir.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArtista()));
+		TituloDir.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitulo()));
+		AlbumDir.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlbum()));
+		AnoDir.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAno()));
+		GeneroDir.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGenero()));
 
 		// Inicializa la tabla de playlist
 		musicaTable.setDisable(true);

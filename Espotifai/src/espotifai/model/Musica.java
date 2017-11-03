@@ -3,7 +3,6 @@ package espotifai.model;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -14,19 +13,16 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.Artwork;
-
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
-public class Musica {
+public class Musica extends AudioFile{
 
 	File archivo;
-	private StringProperty artista;
-	private StringProperty titulo;
-	private StringProperty album;
-	private StringProperty ano;
-	private StringProperty genero;
+	private String artista;
+	private String titulo;
+	private String album;
+	private String ano;
+	private String genero;
 	private String tasaBits;
 	private Image caratula;
 
@@ -44,11 +40,11 @@ public class Musica {
 		Tag tag = f.getTagOrCreateDefault();
 
 		if (tag != null) {
-			artista = new SimpleStringProperty(tag.getFirst(FieldKey.ARTIST));
-			titulo = new SimpleStringProperty(tag.getFirst(FieldKey.TITLE));
-			album = new SimpleStringProperty(tag.getFirst(FieldKey.ALBUM));
-			ano = new SimpleStringProperty(tag.getFirst(FieldKey.YEAR));
-			genero = new SimpleStringProperty(tag.getFirst(FieldKey.GENRE));
+			artista = tag.getFirst(FieldKey.ARTIST);
+			titulo = tag.getFirst(FieldKey.TITLE);
+			album = tag.getFirst(FieldKey.ALBUM);
+			ano = tag.getFirst(FieldKey.YEAR);
+			genero = tag.getFirst(FieldKey.GENRE);
 			tasaBits=f.getAudioHeader().getBitRate();
 
 			// Creacion de la imagen
@@ -224,11 +220,11 @@ public class Musica {
 		f.commit();
 	}
 
-	public StringProperty getGenero() {
+	public String getGenero() {
 		return genero;
 	}
 
-	public void setGenero(StringProperty genero) {
+	public void setGenero(String genero) {
 		this.genero = genero;
 	}
 
@@ -240,35 +236,35 @@ public class Musica {
 		this.archivo = archivo;
 	}
 
-	public StringProperty getAlbum() {
+	public String getAlbum() {
 		return album;
 	}
 
-	public void setAlbum(StringProperty album) {
+	public void setAlbum(String album) {
 		this.album = album;
 	}
 
-	public StringProperty getAno() {
+	public String getAno() {
 		return ano;
 	}
 
-	public void setAno(StringProperty ano) {
+	public void setAno(String ano) {
 		this.ano = ano;
 	}
 
-	public StringProperty getArtista() {
+	public String getArtista() {
 		return artista;
 	}
 
-	public void setArtista(StringProperty artista) {
+	public void setArtista(String artista) {
 		this.artista = artista;
 	}
 
-	public StringProperty getTitulo() {
+	public String getTitulo() {
 		return titulo;
 	}
 
-	public void setTitulo(StringProperty titulo) {
+	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
 

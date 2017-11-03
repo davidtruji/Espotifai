@@ -14,11 +14,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -76,6 +76,20 @@ public class Main extends Application {
 		File selectedDir = directoryChooser.showDialog(primaryStage);
 		return selectedDir;
 	}
+	
+	public File LanzarDialogoEleccionArchivo(String titulo,ExtensionFilter filter) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle(titulo);
+		fileChooser.setInitialDirectory(new File("/"));
+		fileChooser.getExtensionFilters().add(filter);
+		File selectedFile = fileChooser.showOpenDialog(primaryStage);
+		return selectedFile;
+	}
+	
+	
+	
+	
+	
 
 	public void LanzarDialogoEditar(Musica cancion) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
@@ -157,6 +171,15 @@ public class Main extends Application {
 			}
 		}
 	}
+	
+	public void CambiarCaratula() {
+		File imagen=null;
+		ExtensionFilter filter= new ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg");
+		imagen=LanzarDialogoEleccionArchivo("Espotifai - Seleción de carátula", filter);
+		System.out.println("IMAGEN: "+imagen.getAbsolutePath());
+	}
+	
+	
 
 	private String fechaActual() {
 		Calendar c = Calendar.getInstance();

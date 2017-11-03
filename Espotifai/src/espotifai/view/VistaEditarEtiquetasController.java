@@ -6,9 +6,10 @@ import org.jaudiotagger.audio.exceptions.CannotWriteException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
+import espotifai.Main;
 import espotifai.model.Musica;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -27,51 +28,65 @@ public class VistaEditarEtiquetasController {
 	private TextField Genero;
 	@FXML
 	private ImageView caratula;
+	@FXML
+	private Label ClickCaratula;
 
 	private Stage dialogStage;
 	private Musica cancion;
+	private Main main=new Main();
 
 	@FXML
 	private void initialize() {
 
 	}
 
+	public Main getMain() {
+		return main;
+	}
+
+	public void setMain(Main main) {
+		this.main = main;
+	}
+
 	public void setCancion(Musica cancion) throws IOException {
 		this.cancion = cancion;
 
 		try {
-			Artista.setText(cancion.getArtista().get());
+			Artista.setText(cancion.getArtista());
 		} catch (Exception e) {
 			Artista.setText("");
 		}
 
 		try {
-			Titulo.setText(cancion.getTitulo().get());
+			Titulo.setText(cancion.getTitulo());
 		} catch (Exception e) {
 			Titulo.setText("");
 		}
 
 		try {
-			Album.setText(cancion.getAlbum().get());
+			Album.setText(cancion.getAlbum());
 		} catch (Exception e) {
 			Album.setText("");
 		}
 
 		try {
-			Ano.setText(cancion.getAno().get());
+			Ano.setText(cancion.getAno());
 		} catch (Exception e) {
 			Ano.setText("");
 		}
 
 		try {
-			Genero.setText(cancion.getGenero().get());
+			Genero.setText(cancion.getGenero());
 		} catch (Exception e) {
 			Genero.setText("");
 		}
 
 		try {
-			if (cancion.getCaratula() != null)
+			if (cancion.getCaratula() != null) {
 				caratula.setImage(cancion.getCaratula());
+			
+			
+			}
 		} catch (Exception e) {
 			// System.out.println("NO COVER FIND");
 		}
@@ -131,6 +146,13 @@ public class VistaEditarEtiquetasController {
 	}
 
 	@FXML
+	public void AccionSeleccionarCaratula() {
+		//TODO Acabar etiqutar caratula
+		System.out.println("VistaEditarEtiquetasController.AccionSeleccionarCaratula()");
+		main.CambiarCaratula();
+	}
+
+	@FXML
 	public void AccionEditarEtiqutas() throws CannotReadException, IOException, TagException, ReadOnlyFileException,
 			InvalidAudioFrameException, CannotWriteException {
 
@@ -175,11 +197,11 @@ public class VistaEditarEtiquetasController {
 		else
 			cancion.BorrarTagGenero();
 
-		cancion.setArtista(new SimpleStringProperty(cancion.getTagArtista()));
-		cancion.setTitulo(new SimpleStringProperty(cancion.getTagTitulo()));
-		cancion.setAlbum(new SimpleStringProperty(cancion.getTagAlbum()));
-		cancion.setAno(new SimpleStringProperty(cancion.getTagAno()));
-		cancion.setGenero(new SimpleStringProperty(cancion.getTagGenero()));
+		cancion.setArtista(cancion.getTagArtista());
+		cancion.setTitulo(cancion.getTagTitulo());
+		cancion.setAlbum(cancion.getTagAlbum());
+		cancion.setAno(cancion.getTagAno());
+		cancion.setGenero(cancion.getTagGenero());
 		dialogStage.close();
 	}
 
