@@ -232,17 +232,21 @@ public class VistaPrincipalController {
 	 */
 	private void AbrirEnReproducctor(TableView<Musica> t) throws IOException {
 		Musica cancion = t.getSelectionModel().getSelectedItem();
+		String sSistemaOperativo = System.getProperty("os.name");
 
-		// Array de strings que contiene el comando que abre el reproductor
-		String[] comando = { "vlc", cancion.getArchivo().getAbsolutePath() };
+		if (sSistemaOperativo.equalsIgnoreCase("Linux")) {
+			// Array de strings que contiene el comando que abre el reproductor
+			String[] comandoLinux = { "vlc", cancion.getArchivo().getAbsolutePath() };
 
-		try {
+			try {
+				@SuppressWarnings("unused")
+				Process process = Runtime.getRuntime().exec(comandoLinux);
 
-			Process process = Runtime.getRuntime().exec(comando);
+			} catch (Exception e) {
+				main.LanzarDialogoError("Error al intentar abrir el fichero",
+						"Intentelo de nuevo, o instale VLC si no lo tiene");
+			}
 
-		} catch (Exception e) {
-			main.LanzarDialogoError("Error al intentar abrir el fichero",
-					"Intentelo de nuevo, o instale VLC si no lo tiene");
 		}
 	}
 
