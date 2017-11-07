@@ -69,10 +69,10 @@ public class VistaPrincipalController {
 	public void setMain(Main main) {
 		this.main = main;
 
-		// Añade las canciones a la tabla playlist
+		// AÃ±ade las canciones a la tabla playlist
 		musicaTableDir.setItems(main.getMusicaDirectorio());
 
-		// Añade las canciones a la tabla playlist
+		// AÃ±ade las canciones a la tabla playlist
 		musicaTable.setItems(main.getPlaylist());
 
 	}
@@ -108,7 +108,7 @@ public class VistaPrincipalController {
 	}
 
 	/**
-	 * Accion de añadir toda la musica de un directorio en una playlist
+	 * Accion de aÃ±adir toda la musica de un directorio en una playlist
 	 */
 	@FXML
 	public void AcccionAnadirTodo() {
@@ -126,7 +126,7 @@ public class VistaPrincipalController {
 
 		if (rep)
 			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
-					" Estas canciones no se añarirán...");
+					" Estas canciones no se aÃ±arirÃ¡n...");
 
 		actualizarNumeroCancionesPlayslist();
 
@@ -149,7 +149,7 @@ public class VistaPrincipalController {
 	}
 
 	/**
-	 * Accion que añade la musica seleccionada de un directorio a una playlist
+	 * Accion que aÃ±ade la musica seleccionada de un directorio a una playlist
 	 */
 	@FXML
 	public void AccionAnadirMusicaAPlaylist() {
@@ -167,7 +167,7 @@ public class VistaPrincipalController {
 
 		if (rep)
 			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
-					" Estas canciones no se añarirán...");
+					" Estas canciones no se aÃ±arirÃ¡n...");
 
 		actualizarNumeroCancionesPlayslist();
 
@@ -189,8 +189,8 @@ public class VistaPrincipalController {
 				main.LanzarDialogoInformacion("Su playlist se ha generado correctamente:", f.getPath());
 			}
 		} else
-			main.LanzarDialogoError("No ha añadido ninguna canción a su playlist",
-					"Para añadir música pulse el boton añadir");
+			main.LanzarDialogoError("No ha aÃ±adido ninguna canciÃ³n a su playlist",
+					"Para aÃ±adir mÃºsica pulse el boton aÃ±adir");
 	}
 
 	/**
@@ -200,10 +200,10 @@ public class VistaPrincipalController {
 	 */
 	@FXML
 	private void AccionGenerarIndice() throws IOException {
-		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la música");
+		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la mÃºsica");
 		if (f != null) {
 			main.GenerarFicheroIndice(f);
-			main.LanzarDialogoInformacion("Índice generado correctamente:", f.getAbsolutePath());
+			main.LanzarDialogoInformacion("Ã�ndice generado correctamente:", f.getAbsolutePath());
 		}
 	}
 
@@ -219,8 +219,8 @@ public class VistaPrincipalController {
 			main.LanzarDialogoEditar(listaSeleccionados.get(0));
 			musicaTableDir.refresh();
 		} else {
-			main.LanzarDialogoAdvertencia("Ninguna canción del directorio seleccionada",
-					"Debe seleccionar la canción que desee editar");
+			main.LanzarDialogoAdvertencia("Ninguna canciÃ³n del directorio seleccionada",
+					"Debe seleccionar la canciÃ³n que desee editar");
 		}
 
 	}
@@ -234,7 +234,7 @@ public class VistaPrincipalController {
 		Musica cancion = t.getSelectionModel().getSelectedItem();
 		String sSistemaOperativo = System.getProperty("os.name");
 
-		if (sSistemaOperativo.equalsIgnoreCase("Linux")) {
+		if (sSistemaOperativo.contains("Linux")) {
 			// Array de strings que contiene el comando que abre el reproductor
 			String[] comandoLinux = { "vlc", cancion.getArchivo().getAbsolutePath() };
 
@@ -247,6 +247,21 @@ public class VistaPrincipalController {
 						"Intentelo de nuevo, o instale VLC si no lo tiene");
 			}
 
+		} else if (sSistemaOperativo.contains("Windows")) {
+			System.out.println("Windows");
+			String ProgramFiles = System.getenv("ProgramFiles");
+			// Array de strings que contiene el comando que abre el reproductor
+			String[] comandoWindows = { ProgramFiles + "\\VideoLAN\\VLC\\vlc.exe",
+					cancion.getArchivo().getAbsolutePath() };
+
+			try {
+				@SuppressWarnings("unused")
+				Process process = Runtime.getRuntime().exec(comandoWindows);
+
+			} catch (Exception e) {
+				main.LanzarDialogoError("Error al intentar abrir el fichero",
+						"Intentelo de nuevo, o instale VLC si no lo tiene");
+			}
 		}
 	}
 
