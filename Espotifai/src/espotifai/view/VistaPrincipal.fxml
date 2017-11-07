@@ -15,7 +15,6 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Archivo">
                   <items>
-                        <MenuItem disable="true" mnemonicParsing="false" text="Guardar Playlist..." />
                         <MenuItem mnemonicParsing="false" onAction="#AccionSalir" text="Salir" />
                   </items>
                 </Menu>

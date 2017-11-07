@@ -24,6 +24,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public class VistaPrincipalController {
 
@@ -224,6 +226,29 @@ public class VistaPrincipalController {
 	}
 
 	/**
+	 * Intenta reproducir la cancion seleccionada
+	 * 
+	 * @throws IOException
+	 */
+	@FXML
+	private void AbrirEnReproducctor() throws IOException {
+		System.out.println("VistaPrincipalController.AbrirEnReproducctor()");
+		Musica cancion = musicaTableDir.getSelectionModel().getSelectedItem();
+		System.out.println(cancion.getArchivo().getAbsolutePath());
+
+		//Array de strings que contiene el comando que abre el reproductor
+		String[] comando = { "run-mailcap", cancion.getArchivo().getAbsolutePath() };
+
+		try {
+
+			Process process = Runtime.getRuntime().exec(comando);
+
+		} catch (Exception e) {
+
+		}
+	}
+
+	/**
 	 * Accion de salir del programa y cerrarlo por completo
 	 */
 	@FXML
@@ -262,6 +287,22 @@ public class VistaPrincipalController {
 			}
 		});
 
+		musicaTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+					if (mouseEvent.getClickCount() == 2) {
+						try {
+							AbrirEnReproducctor();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+
 		musicaTableDir.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -271,6 +312,22 @@ public class VistaPrincipalController {
 					break;
 				default:
 					break;
+				}
+			}
+		});
+
+		musicaTableDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+					if (mouseEvent.getClickCount() == 2) {
+						try {
+							AbrirEnReproducctor();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		});
