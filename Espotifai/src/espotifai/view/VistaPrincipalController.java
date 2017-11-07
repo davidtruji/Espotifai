@@ -185,8 +185,15 @@ public class VistaPrincipalController {
 		if (!main.getPlaylist().isEmpty()) {
 			File f = main.LanzarDialogoGenerar();
 			if (f != null) {
-				main.GenerarPlaylist(f);
+				String sSistemaOperativo = System.getProperty("os.name");
+
+				if (sSistemaOperativo.contains("Linux")) {
+					main.GenerarPlaylist(f, "\n");
+				} else if (sSistemaOperativo.contains("Windows")) {
+					main.GenerarPlaylist(f, "\r\n");
+				}
 				main.LanzarDialogoInformacion("Su playlist se ha generado correctamente:", f.getPath());
+
 			}
 		} else
 			main.LanzarDialogoError("No ha aÃ±adido ninguna canciÃ³n a su playlist",
@@ -202,7 +209,14 @@ public class VistaPrincipalController {
 	private void AccionGenerarIndice() throws IOException {
 		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la mÃºsica");
 		if (f != null) {
-			main.GenerarFicheroIndice(f);
+			String sSistemaOperativo = System.getProperty("os.name");
+
+			if (sSistemaOperativo.contains("Linux")) {
+				main.GenerarFicheroIndice(f, "//", "\n");
+			} else if (sSistemaOperativo.contains("Windows")) {
+				main.GenerarFicheroIndice(f, "\\", "\r\n");
+			}
+
 			main.LanzarDialogoInformacion("Ã�ndice generado correctamente:", f.getAbsolutePath());
 		}
 	}

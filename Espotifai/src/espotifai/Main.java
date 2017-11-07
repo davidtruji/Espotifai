@@ -231,11 +231,11 @@ public class Main extends Application {
 	 *            Directorio donde se generar el archivo .m3u
 	 * @throws IOException
 	 */
-	public void GenerarPlaylist(File f) throws IOException {
+	public void GenerarPlaylist(File f, String salto) throws IOException {
 		FileWriter writer = new FileWriter(f.getAbsolutePath() + ".m3u");
-		writer.write("#PLAYLIST GENERADA POR ESPOTIFAI" + "\n");
+		writer.write("#PLAYLIST GENERADA POR ESPOTIFAI" + salto);
 		for (int i = 0; i < playlist.size(); i++)
-			writer.write(playlist.get(i).getArchivo().getAbsolutePath() + "\n");
+			writer.write(playlist.get(i).getArchivo().getAbsolutePath() + salto);
 		writer.close();
 	}
 
@@ -266,19 +266,19 @@ public class Main extends Application {
 	 *            Directorio a indexar
 	 * @throws IOException
 	 */
-	public void GenerarFicheroIndice(File f) throws IOException {
-		FileWriter writer = new FileWriter(f.getAbsolutePath() + "\\Indice_" + fechaActual() + ".txt");
-		writer.write("Ã�NDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + "\n");
-		String sep = "  ";
+	public void GenerarFicheroIndice(File f, String sep, String salto) throws IOException {
+		FileWriter writer = new FileWriter(f.getAbsolutePath() + sep + "Indice_" + fechaActual() + ".txt");
+		writer.write("Ã�NDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + salto);
+		String esp = "  ";
 		ContadorIndice = 0;
 		tamBiblioteca = 0;
-		GenerarFicheroIndiceR(f, writer, sep);
-		writer.write("\n\n\n");
-		writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + "\n");
+		GenerarFicheroIndiceR(f, writer, esp, salto);
+		writer.write(salto + salto + salto);
+		writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + salto);
 		if (tamBiblioteca > 1000000000)
-			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÃšSICA" + "\n");
+			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÃšSICA" + salto);
 		else
-			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÃšSICA" + "\n");
+			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÃšSICA" + salto);
 		writer.close();
 	}
 
@@ -301,25 +301,24 @@ public class Main extends Application {
 	 *            Separador de directorios
 	 * @throws IOException
 	 */
-	private void GenerarFicheroIndiceR(File f, FileWriter fw, String sep) throws IOException {
+	private void GenerarFicheroIndiceR(File f, FileWriter fw, String sep, String salto) throws IOException {
 		File[] ficheros = f.listFiles();
 		for (int i = 0; i < ficheros.length; i++) {
 			if (esMusica(ficheros[i])) {
 				Musica m = new Musica(ficheros[i]);
-				fw.write(sep + "[" + m.getTasaBits() + " kbps] " + ficheros[i].getName() + "\r\n");
+				fw.write(sep + "[" + m.getTasaBits() + " kbps] " + ficheros[i].getName() + salto);
 				ContadorIndice++;
 				tamBiblioteca = tamBiblioteca + ficheros[i].length();
 			} else if (ficheros[i].isDirectory()) {
-				fw.write("\n");
-				fw.write("\n");
-				fw.write(sep + "[" + ficheros[i].getName() + "...]" + "\n");
+				fw.write(salto);
+				fw.write(salto);
+				fw.write(sep + "[" + ficheros[i].getName() + "...]" + salto);
 				String nuevo_separador;
 				nuevo_separador = sep + "  ";
-				GenerarFicheroIndiceR(ficheros[i], fw, nuevo_separador);
+				GenerarFicheroIndiceR(ficheros[i], fw, nuevo_separador, salto);
 			}
 		}
 	}
-	 
 
 	/**
 	 * Metodo que dado un archivo por parametro devuelve true si es un archivo de
@@ -390,7 +389,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		//Iconos de la aplicacion
+		// Iconos de la aplicacion
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-16.png")));
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-32.png")));
 		primaryStage.setTitle("Espotifai - Gestor de MÃºsica");
