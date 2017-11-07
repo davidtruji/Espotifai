@@ -1,3 +1,12 @@
+/**
+ * 
+ * Espotifai
+ * 
+ * @Fichero: Musica.java
+ * @Autor: David Trujillo Torres
+ * @Fecha: 3 nov. 2017
+ */
+
 package espotifai.model;
 
 import java.io.ByteArrayInputStream;
@@ -16,14 +25,6 @@ import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
 import javafx.scene.image.Image;
 
-/**
- * 
- * Espotifai
- * 
- * @Fichero: Musica.java
- * @Autor: David Trujillo Torres
- * @Fecha: 3 nov. 2017
- */
 public class Musica {
 
 	File archivo;

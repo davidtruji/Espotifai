@@ -1,3 +1,12 @@
+/**
+ * 
+ * Espotifai
+ * 
+ * @Fichero: VistaEditarEtiquetasController.java
+ * @Autor: David Trujillo Torres
+ * @Fecha: 3 nov. 2017
+ */
+
 package espotifai.view;
 
 import java.io.File;
@@ -16,14 +25,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-/**
- * 
- * Espotifai
- * 
- * @Fichero: VistaEditarEtiquetasController.java
- * @Autor: David Trujillo Torres
- * @Fecha: 3 nov. 2017
- */
 public class VistaEditarEtiquetasController {
 
 	@FXML

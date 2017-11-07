@@ -1,3 +1,12 @@
+/**
+ * 
+ * Espotifai
+ * 
+ * @Fichero: Main.java
+ * @Autor: David Trujillo Torres
+ * @Fecha: 3 nov. 2017
+ */
+
 package espotifai;
 
 import java.io.File;
@@ -14,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
@@ -22,14 +32,6 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-/**
- * 
- * Espotifai
- * 
- * @Fichero: Main.java
- * @Autor: David Trujillo Torres
- * @Fecha: 3 nov. 2017
- */
 public class Main extends Application {
 
 	private Stage primaryStage;
@@ -387,6 +389,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
+		//Iconos de la aplicacion
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-16.png")));
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-32.png")));
 		primaryStage.setTitle("Espotifai - Gestor de Música");
 		primaryStage.setMinHeight(500);
 		primaryStage.setMinWidth(900);

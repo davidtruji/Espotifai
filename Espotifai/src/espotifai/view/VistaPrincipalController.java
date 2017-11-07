@@ -1,3 +1,12 @@
+/**
+ * 
+ * Espotifai
+ * 
+ * @Fichero: VistaPrincipalController.java
+ * @Autor: David Trujillo Torres
+ * @Fecha: 3 nov. 2017
+ */
+
 package espotifai.view;
 
 import java.io.File;
@@ -16,14 +25,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
-/**
- * 
- * Espotifai
- * 
- * @Fichero: VistaPrincipalController.java
- * @Autor: David Trujillo Torres
- * @Fecha: 3 nov. 2017
- */
 public class VistaPrincipalController {
 
 	@FXML
