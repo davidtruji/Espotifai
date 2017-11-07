@@ -108,7 +108,7 @@ public class VistaPrincipalController {
 	}
 
 	/**
-	 * Accion de aÃ±adir toda la musica de un directorio en una playlist
+	 * Accion de añadir toda la musica de un directorio en una playlist
 	 */
 	@FXML
 	public void AcccionAnadirTodo() {
@@ -126,7 +126,7 @@ public class VistaPrincipalController {
 
 		if (rep)
 			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
-					" Estas canciones no se aÃ±arirÃ¡n...");
+					" Estas canciones no se añadirán...");
 
 		actualizarNumeroCancionesPlayslist();
 
@@ -167,7 +167,7 @@ public class VistaPrincipalController {
 
 		if (rep)
 			main.LanzarDialogoAdvertencia("Una o mas caciones, ya se encuentran en la playlist",
-					" Estas canciones no se aÃ±arirÃ¡n...");
+					" Estas canciones no se añadirán...");
 
 		actualizarNumeroCancionesPlayslist();
 
@@ -196,8 +196,8 @@ public class VistaPrincipalController {
 
 			}
 		} else
-			main.LanzarDialogoError("No ha aÃ±adido ninguna canciÃ³n a su playlist",
-					"Para aÃ±adir mÃºsica pulse el boton aÃ±adir");
+			main.LanzarDialogoError("No ha añadido ninguna canción a su playlist",
+					"Para añadir música pulse el boton añadir");
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class VistaPrincipalController {
 	 */
 	@FXML
 	private void AccionGenerarIndice() throws IOException {
-		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la mÃºsica");
+		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la música");
 		if (f != null) {
 			String sSistemaOperativo = System.getProperty("os.name");
 
@@ -217,7 +217,7 @@ public class VistaPrincipalController {
 				main.GenerarFicheroIndice(f, "\\", "\r\n");
 			}
 
-			main.LanzarDialogoInformacion("Ã�ndice generado correctamente:", f.getAbsolutePath());
+			main.LanzarDialogoInformacion("Índice generado correctamente:", f.getAbsolutePath());
 		}
 	}
 
@@ -233,8 +233,8 @@ public class VistaPrincipalController {
 			main.LanzarDialogoEditar(listaSeleccionados.get(0));
 			musicaTableDir.refresh();
 		} else {
-			main.LanzarDialogoAdvertencia("Ninguna canciÃ³n del directorio seleccionada",
-					"Debe seleccionar la canciÃ³n que desee editar");
+			main.LanzarDialogoAdvertencia("Ninguna canción del directorio seleccionada",
+					"Debe seleccionar la canción que desee editar");
 		}
 
 	}

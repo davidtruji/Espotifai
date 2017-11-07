@@ -195,7 +195,7 @@ public class Main extends Application {
 	 */
 	public void LanzarDialogoInformacion(String header, String text) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Espotifai - InformaciÃ³n");
+		alert.setTitle("Espotifai - Información");
 		alert.setHeaderText(header);
 		alert.setContentText(text);
 		alert.showAndWait();
@@ -268,7 +268,7 @@ public class Main extends Application {
 	 */
 	public void GenerarFicheroIndice(File f, String sep, String salto) throws IOException {
 		FileWriter writer = new FileWriter(f.getAbsolutePath() + sep + "Indice_" + fechaActual() + ".txt");
-		writer.write("Ã�NDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + salto);
+		writer.write("ÍNDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + salto);
 		String esp = "  ";
 		ContadorIndice = 0;
 		tamBiblioteca = 0;
@@ -276,9 +276,9 @@ public class Main extends Application {
 		writer.write(salto + salto + salto);
 		writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + salto);
 		if (tamBiblioteca > 1000000000)
-			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÃšSICA" + salto);
+			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÚSICA" + salto);
 		else
-			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÃšSICA" + salto);
+			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA" + salto);
 		writer.close();
 	}
 
@@ -392,7 +392,7 @@ public class Main extends Application {
 		// Iconos de la aplicacion
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-16.png")));
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-32.png")));
-		primaryStage.setTitle("Espotifai - Gestor de MÃºsica");
+		primaryStage.setTitle("Espotifai - Gestor de Música");
 		primaryStage.setMinHeight(500);
 		primaryStage.setMinWidth(900);
 		iniciarRootLayout();
