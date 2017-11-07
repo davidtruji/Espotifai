@@ -195,7 +195,7 @@ public class Main extends Application {
 	 */
 	public void LanzarDialogoInformacion(String header, String text) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Espotifai - Información");
+		alert.setTitle("Espotifai - InformaciÃ³n");
 		alert.setHeaderText(header);
 		alert.setContentText(text);
 		alert.showAndWait();
@@ -240,7 +240,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Añade las canciones encontradas en el directorio pasado por parametro a
+	 * AÃ±ade las canciones encontradas en el directorio pasado por parametro a
 	 * musicaDirectorio
 	 * 
 	 * @param Dir
@@ -267,8 +267,8 @@ public class Main extends Application {
 	 * @throws IOException
 	 */
 	public void GenerarFicheroIndice(File f) throws IOException {
-		FileWriter writer = new FileWriter(f.getAbsolutePath() + "//Indice_" + fechaActual() + ".txt");
-		writer.write("ÍNDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + "\n");
+		FileWriter writer = new FileWriter(f.getAbsolutePath() + "\\Indice_" + fechaActual() + ".txt");
+		writer.write("Ã�NDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + "\n");
 		String sep = "  ";
 		ContadorIndice = 0;
 		tamBiblioteca = 0;
@@ -276,9 +276,9 @@ public class Main extends Application {
 		writer.write("\n\n\n");
 		writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + "\n");
 		if (tamBiblioteca > 1000000000)
-			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÚSICA" + "\n");
+			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÃšSICA" + "\n");
 		else
-			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA" + "\n");
+			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÃšSICA" + "\n");
 		writer.close();
 	}
 
@@ -306,7 +306,7 @@ public class Main extends Application {
 		for (int i = 0; i < ficheros.length; i++) {
 			if (esMusica(ficheros[i])) {
 				Musica m = new Musica(ficheros[i]);
-				fw.write(sep + "[" + m.getTasaBits() + " kbps] " + ficheros[i].getName() + "\n");
+				fw.write(sep + "[" + m.getTasaBits() + " kbps] " + ficheros[i].getName() + "\r\n");
 				ContadorIndice++;
 				tamBiblioteca = tamBiblioteca + ficheros[i].length();
 			} else if (ficheros[i].isDirectory()) {
@@ -319,6 +319,7 @@ public class Main extends Application {
 			}
 		}
 	}
+	 
 
 	/**
 	 * Metodo que dado un archivo por parametro devuelve true si es un archivo de
@@ -348,7 +349,7 @@ public class Main extends Application {
 		String h = Integer.toString(c.get(Calendar.HOUR));
 		String m = Integer.toString(c.get(Calendar.MINUTE));
 		String s = Integer.toString(c.get(Calendar.SECOND));
-		String hora = (h + ":" + m + ":" + s);
+		String hora = (h + m + s);
 		String dia = Integer.toString(c.get(Calendar.DATE));
 		String mes = Integer.toString(c.get(Calendar.MONTH));
 		String annio = Integer.toString(c.get(Calendar.YEAR));
@@ -392,7 +393,7 @@ public class Main extends Application {
 		//Iconos de la aplicacion
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-16.png")));
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-32.png")));
-		primaryStage.setTitle("Espotifai - Gestor de Música");
+		primaryStage.setTitle("Espotifai - Gestor de MÃºsica");
 		primaryStage.setMinHeight(500);
 		primaryStage.setMinWidth(900);
 		iniciarRootLayout();
