@@ -230,21 +230,19 @@ public class VistaPrincipalController {
 	 * 
 	 * @throws IOException
 	 */
-	@FXML
-	private void AbrirEnReproducctor() throws IOException {
-		System.out.println("VistaPrincipalController.AbrirEnReproducctor()");
-		Musica cancion = musicaTableDir.getSelectionModel().getSelectedItem();
-		System.out.println(cancion.getArchivo().getAbsolutePath());
+	private void AbrirEnReproducctor(TableView<Musica> t) throws IOException {
+		Musica cancion = t.getSelectionModel().getSelectedItem();
 
-		//Array de strings que contiene el comando que abre el reproductor
-		String[] comando = { "run-mailcap", cancion.getArchivo().getAbsolutePath() };
+		// Array de strings que contiene el comando que abre el reproductor
+		String[] comando = { "vlc", cancion.getArchivo().getAbsolutePath() };
 
 		try {
 
 			Process process = Runtime.getRuntime().exec(comando);
 
 		} catch (Exception e) {
-
+			main.LanzarDialogoError("Error al intentar abrir el fichero",
+					"Intentelo de nuevo, o instale VLC si no lo tiene");
 		}
 	}
 
@@ -293,7 +291,7 @@ public class VistaPrincipalController {
 				if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 					if (mouseEvent.getClickCount() == 2) {
 						try {
-							AbrirEnReproducctor();
+							AbrirEnReproducctor(musicaTable);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -322,7 +320,7 @@ public class VistaPrincipalController {
 				if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 					if (mouseEvent.getClickCount() == 2) {
 						try {
-							AbrirEnReproducctor();
+							AbrirEnReproducctor(musicaTableDir);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
