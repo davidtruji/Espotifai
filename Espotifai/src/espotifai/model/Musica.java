@@ -27,7 +27,7 @@ import javafx.scene.image.Image;
 
 public class Musica {
 
-	File archivo;
+	private File archivo;
 	private String artista;
 	private String titulo;
 	private String album;
