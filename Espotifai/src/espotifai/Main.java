@@ -1,12 +1,3 @@
-/**
- * 
- * Espotifai
- * 
- * @Fichero: Main.java
- * @Autor: David Trujillo Torres
- * @Fecha: 3 nov. 2017
- */
-
 package espotifai;
 
 import java.io.File;
@@ -32,6 +23,13 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * Espotifai
+ * @Author: David Trujillo Torres
+ * @Date: 02-02-2018
+ *
+ */
 public class Main extends Application {
 
 	private Stage primaryStage;
