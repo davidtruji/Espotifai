@@ -211,6 +211,7 @@ public class VistaPrincipalController {
 		if (f != null) {
 			String sSistemaOperativo = System.getProperty("os.name");
 
+//main.LanzarDialogoIndice();			
 			if (sSistemaOperativo.contains("Linux")) {
 				main.GenerarFicheroIndice(f, "//", "\n");
 			} else if (sSistemaOperativo.contains("Windows")) {

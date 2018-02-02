@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.util.Calendar;
 import espotifai.model.Musica;
 import espotifai.view.VistaEditarEtiquetasController;
+import espotifai.view.VistaIndiceController;
 import espotifai.view.VistaPrincipalController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -26,6 +28,7 @@ import javafx.stage.Stage;
 /**
  * 
  * Espotifai
+ * 
  * @Author: David Trujillo Torres
  * @Date: 02-02-2018
  *
@@ -155,6 +158,31 @@ public class Main extends Application {
 	}
 
 	/**
+	 * Lanza el dialogo de progreso al generar un indice
+	 * 
+	 * @throws IOException
+	 */
+	public void LanzarDialogoIndice() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(Main.class.getResource("view/VistaIndice.fxml"));
+		AnchorPane page;
+		page = (AnchorPane) loader.load();
+
+		Stage dialogStage = new Stage();
+		dialogStage.setResizable(false);
+		dialogStage.setTitle("Espotifai - Generando Índice");
+		dialogStage.initModality(Modality.WINDOW_MODAL);
+		dialogStage.initOwner(primaryStage);
+		Scene scene = new Scene(page);
+		dialogStage.setScene(scene);
+		VistaIndiceController controller = loader.getController();
+		controller.setProgreso(0.50);
+		// controller.setDialogStage(dialogStage);
+		// controller.setCancion(cancion);
+		dialogStage.showAndWait();
+	}
+
+	/**
 	 * Lanza el dialogo para que elija el directorio de su playlist
 	 * 
 	 * @return Retorna el directorio seleccionado
@@ -257,6 +285,8 @@ public class Main extends Application {
 		}
 	}
 
+	
+	//TODO Implementando con Threads...
 	/**
 	 * Metodo que se emplea para genera el indice
 	 * 
@@ -265,19 +295,36 @@ public class Main extends Application {
 	 * @throws IOException
 	 */
 	public void GenerarFicheroIndice(File f, String sep, String salto) throws IOException {
-		FileWriter writer = new FileWriter(f.getAbsolutePath() + sep + "Indice_" + fechaActual() + ".txt");
-		writer.write("ÍNDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + salto);
-		String esp = "  ";
-		ContadorIndice = 0;
-		tamBiblioteca = 0;
-		GenerarFicheroIndiceR(f, writer, esp, salto);
-		writer.write(salto + salto + salto);
-		writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + salto);
-		if (tamBiblioteca > 1000000000)
-			writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÚSICA" + salto);
-		else
-			writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA" + salto);
-		writer.close();
+
+		// System.out.println(ContarCancionesDirectorioR(f) + " Canciones encontradas en
+		// " + f.getAbsolutePath());
+
+		Task task = new Task() {
+			@Override
+			protected Object call() throws Exception {
+				FileWriter writer = new FileWriter(f.getAbsolutePath() + sep + "Indice_" + fechaActual() + ".txt");
+				writer.write("ÍNDICE DE BIBLIOTECA: " + f.getAbsolutePath() + " GENERADO POR ESPOTIFAI" + salto);
+				String esp = "  ";
+				ContadorIndice = 0;
+				tamBiblioteca = 0;
+				GenerarFicheroIndiceR(f, writer, esp, salto);
+
+				writer.write(salto + salto + salto);
+				writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + salto);
+				if (tamBiblioteca > 1000000000)
+					writer.write(Math.round((tamBiblioteca / 1000000000.0) * 100.0) / 100.0 + " GB DE MÚSICA" + salto);
+				else
+					writer.write(Math.round((tamBiblioteca / 1000000.0) * 100.0) / 100.0 + " MB DE MÚSICA" + salto);
+				writer.close();
+				return null;
+			}
+		};
+
+		new Thread(task).start();
+		LanzarDialogoIndice();
+
+		
+		
 	}
 
 	/*
@@ -316,6 +363,29 @@ public class Main extends Application {
 				GenerarFicheroIndiceR(ficheros[i], fw, nuevo_separador, salto);
 			}
 		}
+	}
+
+	/**
+	 * Metodo que busca recursivamente y cuenta las canciones en un directorio
+	 * 
+	 * @param f
+	 *            Ruta que contenga la musica a buscar
+	 * @return el numero de canciones encontradas
+	 */
+	private int ContarCancionesDirectorioR(File f) {
+		File[] ficheros = f.listFiles();
+		int contador = 0;
+		for (int i = 0; i < ficheros.length; i++) {
+
+			if (esMusica(ficheros[i])) {
+				contador++;
+			} else if (ficheros[i].isDirectory()) {
+				contador = contador + ContarCancionesDirectorioR(ficheros[i]);
+			}
+
+		}
+
+		return contador;
 	}
 
 	/**
@@ -390,6 +460,7 @@ public class Main extends Application {
 		// Iconos de la aplicacion
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-16.png")));
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/recursos/imagenes/icon-32.png")));
+
 		primaryStage.setTitle("Espotifai - Gestor de Música");
 		primaryStage.setMinHeight(500);
 		primaryStage.setMinWidth(900);
