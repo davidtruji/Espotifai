@@ -209,16 +209,18 @@ public class VistaPrincipalController {
 	private void AccionGenerarIndice() throws IOException {
 		File f = main.LanzarDialogoEleccionDirectorio("Seleccione el directorio que contiene la música");
 		if (f != null) {
+
+
 			String sSistemaOperativo = System.getProperty("os.name");
 
-//main.LanzarDialogoIndice();			
 			if (sSistemaOperativo.contains("Linux")) {
 				main.GenerarFicheroIndice(f, "//", "\n");
 			} else if (sSistemaOperativo.contains("Windows")) {
 				main.GenerarFicheroIndice(f, "\\", "\r\n");
 			}
-
+			main.LanzarDialogoIndice();
 			main.LanzarDialogoInformacion("Índice generado correctamente:", f.getAbsolutePath());
+
 		}
 	}
 

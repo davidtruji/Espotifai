@@ -12,6 +12,8 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -41,6 +43,7 @@ public class Main extends Application {
 	private float tamBiblioteca = 0;
 	private ObservableList<Musica> playlist = FXCollections.observableArrayList();
 	private ObservableList<Musica> musicaDirectorio = FXCollections.observableArrayList();
+	private Task<?> indiceTask;
 
 	/*
 	 * 
@@ -97,6 +100,10 @@ public class Main extends Application {
 	 * DIALOGOS---------------------------------------------------------------------
 	 * 
 	 */
+
+	public Task<?> getIndiceTask() {
+		return indiceTask;
+	}
 
 	/**
 	 * Lanza un dialogo para elegir un directorio
@@ -167,7 +174,6 @@ public class Main extends Application {
 		loader.setLocation(Main.class.getResource("view/VistaIndice.fxml"));
 		AnchorPane page;
 		page = (AnchorPane) loader.load();
-
 		Stage dialogStage = new Stage();
 		dialogStage.setResizable(false);
 		dialogStage.setTitle("Espotifai - Generando Índice");
@@ -176,9 +182,16 @@ public class Main extends Application {
 		Scene scene = new Scene(page);
 		dialogStage.setScene(scene);
 		VistaIndiceController controller = loader.getController();
-		controller.setProgreso(0.50);
-		// controller.setDialogStage(dialogStage);
-		// controller.setCancion(cancion);
+		controller.setMain(this);
+		controller.inicializarProgreso();
+
+		indiceTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent t) {
+				dialogStage.close();
+			}
+		});
 		dialogStage.showAndWait();
 	}
 
@@ -285,8 +298,7 @@ public class Main extends Application {
 		}
 	}
 
-	
-	//TODO Implementando con Threads...
+	// TODO Implementando con Threads...
 	/**
 	 * Metodo que se emplea para genera el indice
 	 * 
@@ -296,10 +308,9 @@ public class Main extends Application {
 	 */
 	public void GenerarFicheroIndice(File f, String sep, String salto) throws IOException {
 
-		// System.out.println(ContarCancionesDirectorioR(f) + " Canciones encontradas en
-		// " + f.getAbsolutePath());
+		int numCanciones = ContarCancionesDirectorioR(f);
 
-		Task task = new Task() {
+		indiceTask = new Task<Object>() {
 			@Override
 			protected Object call() throws Exception {
 				FileWriter writer = new FileWriter(f.getAbsolutePath() + sep + "Indice_" + fechaActual() + ".txt");
@@ -307,7 +318,7 @@ public class Main extends Application {
 				String esp = "  ";
 				ContadorIndice = 0;
 				tamBiblioteca = 0;
-				GenerarFicheroIndiceR(f, writer, esp, salto);
+				GenerarFicheroIndiceR(f, writer, esp, salto, numCanciones);
 
 				writer.write(salto + salto + salto);
 				writer.write(ContadorIndice + " CANCIONES ENCONTRADAS EN: " + f.getAbsolutePath() + salto);
@@ -318,13 +329,33 @@ public class Main extends Application {
 				writer.close();
 				return null;
 			}
+
+			private void GenerarFicheroIndiceR(File f, FileWriter fw, String sep, String salto, int numCanciones)
+					throws IOException {
+				File[] ficheros = f.listFiles();
+				for (int i = 0; i < ficheros.length; i++) {
+					if (esMusica(ficheros[i])) {
+						Musica m = new Musica(ficheros[i]);
+						fw.write(sep + "[" + m.getTasaBits() + " kbps] " + ficheros[i].getName() + salto);
+						ContadorIndice++;
+						updateProgress(ContadorIndice, numCanciones);
+						tamBiblioteca = tamBiblioteca + ficheros[i].length();
+					} else if (ficheros[i].isDirectory()) {
+						updateMessage("/"+ficheros[i].getName());
+						fw.write(salto);
+						fw.write(salto);
+						fw.write(sep + "[" + ficheros[i].getName() + "...]" + salto);
+						String nuevo_separador;
+						nuevo_separador = sep + "  ";
+						GenerarFicheroIndiceR(ficheros[i], fw, nuevo_separador, salto, numCanciones);
+					}
+				}
+			}
+
 		};
 
-		new Thread(task).start();
-		LanzarDialogoIndice();
+		new Thread(indiceTask).start();
 
-		
-		
 	}
 
 	/*
@@ -334,36 +365,7 @@ public class Main extends Application {
 	 * 
 	 */
 
-	/**
-	 * Metodo que explora recursivamente directorios encontrando la musica que
-	 * contienen y volcandola en un indice
-	 * 
-	 * @param f
-	 *            Ruta a explorar
-	 * @param fw
-	 *            Flujo de escritura
-	 * @param sep
-	 *            Separador de directorios
-	 * @throws IOException
-	 */
-	private void GenerarFicheroIndiceR(File f, FileWriter fw, String sep, String salto) throws IOException {
-		File[] ficheros = f.listFiles();
-		for (int i = 0; i < ficheros.length; i++) {
-			if (esMusica(ficheros[i])) {
-				Musica m = new Musica(ficheros[i]);
-				fw.write(sep + "[" + m.getTasaBits() + " kbps] " + ficheros[i].getName() + salto);
-				ContadorIndice++;
-				tamBiblioteca = tamBiblioteca + ficheros[i].length();
-			} else if (ficheros[i].isDirectory()) {
-				fw.write(salto);
-				fw.write(salto);
-				fw.write(sep + "[" + ficheros[i].getName() + "...]" + salto);
-				String nuevo_separador;
-				nuevo_separador = sep + "  ";
-				GenerarFicheroIndiceR(ficheros[i], fw, nuevo_separador, salto);
-			}
-		}
-	}
+	
 
 	/**
 	 * Metodo que busca recursivamente y cuenta las canciones en un directorio
@@ -372,7 +374,7 @@ public class Main extends Application {
 	 *            Ruta que contenga la musica a buscar
 	 * @return el numero de canciones encontradas
 	 */
-	private int ContarCancionesDirectorioR(File f) {
+	public static int ContarCancionesDirectorioR(File f) {
 		File[] ficheros = f.listFiles();
 		int contador = 0;
 		for (int i = 0; i < ficheros.length; i++) {
@@ -396,7 +398,7 @@ public class Main extends Application {
 	 *            El archivo en cuestion
 	 * @return
 	 */
-	private boolean esMusica(File f) {
+	private static boolean esMusica(File f) {
 		String nombre = f.getName();
 		if (nombre.endsWith("mp3") || nombre.endsWith("MP3") || nombre.endsWith("flac") || nombre.endsWith("FLAC")
 				|| nombre.endsWith("wav") || nombre.endsWith("WAV") || nombre.endsWith("wma") || nombre.endsWith("WMA")

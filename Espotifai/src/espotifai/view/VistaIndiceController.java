@@ -2,15 +2,8 @@ package espotifai.view;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import espotifai.Main;
-import espotifai.model.Musica;
-import javafx.concurrent.Task;
+import javafx.beans.binding.NumberBinding;
 import javafx.fxml.FXML;
 
 /**
@@ -28,11 +21,12 @@ public class VistaIndiceController {
 	@FXML
 	private Label informacion;
 	@FXML
+	private Label porcentaje;
+	@FXML
 	private ProgressBar progreso;
+	
 
-	Main main;	
-	
-	
+	private Main main;
 
 	public void setMain(Main main) {
 		this.main = main;
@@ -68,6 +62,16 @@ public class VistaIndiceController {
 	 */
 	public void setProgreso(double _progreso) {
 		progreso.setProgress(_progreso);
+	}
+
+	public void inicializarProgreso() {
+		NumberBinding porciento=progreso.progressProperty().multiply(100);
+		porcentaje.textProperty().unbind();
+		porcentaje.textProperty().bind(porciento.asString("%.2f %%"));
+		progreso.progressProperty().unbind();
+		progreso.progressProperty().bind(main.getIndiceTask().progressProperty());
+		informacion.textProperty().unbind();
+		informacion.textProperty().bind(main.getIndiceTask().messageProperty());
 	}
 
 }
