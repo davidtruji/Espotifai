@@ -323,7 +323,6 @@ public class Main extends Application {
 	 * @throws IOException
 	 */
 	public void AnadirMusicaDirectoio(File Dir) throws IOException {
-		// TODO Hacer dialogo de carga y en un nuevo thread
 
 		metadatosTask = new Task<Object>() {
 			@Override
