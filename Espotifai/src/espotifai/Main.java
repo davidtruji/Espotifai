@@ -26,6 +26,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * 
@@ -44,6 +45,7 @@ public class Main extends Application {
 	private ObservableList<Musica> playlist = FXCollections.observableArrayList();
 	private ObservableList<Musica> musicaDirectorio = FXCollections.observableArrayList();
 	private Task<?> indiceTask;
+	private Task<?> metadatosTask;
 
 	/*
 	 * 
@@ -76,6 +78,10 @@ public class Main extends Application {
 	 * GETTERS----------------------------------------------------------------------
 	 * 
 	 */
+
+	public Task<?> getMetadatosTask() {
+		return metadatosTask;
+	}
 
 	/**
 	 * Devuelve el Array de playlist
@@ -176,6 +182,7 @@ public class Main extends Application {
 		page = (AnchorPane) loader.load();
 		Stage dialogStage = new Stage();
 		dialogStage.setResizable(false);
+		dialogStage.initStyle(StageStyle.UNDECORATED);
 		dialogStage.setTitle("Espotifai - Generando Índice");
 		dialogStage.initModality(Modality.WINDOW_MODAL);
 		dialogStage.initOwner(primaryStage);
@@ -186,6 +193,35 @@ public class Main extends Application {
 		controller.inicializarProgreso();
 
 		indiceTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent t) {
+				dialogStage.close();
+			}
+		});
+		dialogStage.showAndWait();
+	}
+
+	/**
+	 * Lanza el dialogo de espera para obtener datos de las canciones en un
+	 * directorio
+	 * 
+	 * @throws IOException
+	 */
+	public void LanzarDialogoMetadatos() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(Main.class.getResource("view/VistaCargaMetadatos.fxml"));
+		AnchorPane page;
+		page = (AnchorPane) loader.load();
+		Stage dialogStage = new Stage();
+		dialogStage.setResizable(false);
+		dialogStage.initStyle(StageStyle.UNDECORATED);
+		dialogStage.setTitle("Espotifai - Obteniendo Etiquetas de música");
+		dialogStage.initModality(Modality.WINDOW_MODAL);
+		dialogStage.initOwner(primaryStage);
+		Scene scene = new Scene(page);
+		dialogStage.setScene(scene);
+		metadatosTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, new EventHandler<WorkerStateEvent>() {
 
 			@Override
 			public void handle(WorkerStateEvent t) {
@@ -284,21 +320,32 @@ public class Main extends Application {
 	 * 
 	 * @param Dir
 	 *            Directorio que contiene la musica
+	 * @throws IOException
 	 */
-	public void AnadirMusicaDirectoio(File Dir) {
+	public void AnadirMusicaDirectoio(File Dir) throws IOException {
 		// TODO Hacer dialogo de carga y en un nuevo thread
 
-		File[] musicaEncontrada = Dir.listFiles();
-		for (int i = 0; i < musicaEncontrada.length; i++) {
-			if (esMusica(musicaEncontrada[i])) {
-				Musica m = new Musica(musicaEncontrada[i]);
-				musicaDirectorio.add(m);
-				// System.out.println(m.getTitulo().toString() + " - " + m.getTasaBits());
+		metadatosTask = new Task<Object>() {
+			@Override
+			protected Object call() throws Exception {
+				File[] musicaEncontrada = Dir.listFiles();
+				for (int i = 0; i < musicaEncontrada.length; i++) {
+					if (esMusica(musicaEncontrada[i])) {
+						Musica m = new Musica(musicaEncontrada[i]);
+						musicaDirectorio.add(m);
+					}
+					updateProgress(i, musicaEncontrada.length);
+				}
+				return null;
 			}
-		}
+
+		};
+
+		new Thread(metadatosTask).start();
+		LanzarDialogoMetadatos();
+
 	}
 
-	// TODO Implementando con Threads...
 	/**
 	 * Metodo que se emplea para genera el indice
 	 * 
@@ -341,7 +388,7 @@ public class Main extends Application {
 						updateProgress(ContadorIndice, numCanciones);
 						tamBiblioteca = tamBiblioteca + ficheros[i].length();
 					} else if (ficheros[i].isDirectory()) {
-						updateMessage("/"+ficheros[i].getName());
+						updateMessage("/" + ficheros[i].getName());
 						fw.write(salto);
 						fw.write(salto);
 						fw.write(sep + "[" + ficheros[i].getName() + "...]" + salto);
@@ -364,8 +411,6 @@ public class Main extends Application {
 	 * UTILES-----------------------------------------------------------------------
 	 * 
 	 */
-
-	
 
 	/**
 	 * Metodo que busca recursivamente y cuenta las canciones en un directorio

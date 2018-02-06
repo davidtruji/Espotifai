@@ -89,13 +89,15 @@ public class VistaPrincipalController {
 
 	/**
 	 * Accion para elegir un directorio en el que buscar musica
+	 * @throws IOException 
 	 */
 	@FXML
-	public void AccionSeleccionarDirectorio() {
+	public void AccionSeleccionarDirectorio() throws IOException {
 
 		File dir = main.LanzarDialogoEleccionDirectorio("Por favor seleccione un directorio");
 
 		if (dir != null) {
+			
 			nombreCarpeta.setVisible(true);
 			nombreCarpeta.setText(dir.getName());
 			rutaSeleccionada.setText(dir.getAbsolutePath());
@@ -104,6 +106,7 @@ public class VistaPrincipalController {
 			numeroCancionesDir.setVisible(true);
 			numeroCancionesDir.setText(Integer.toString(main.getMusicaDirectorio().size()) + " Canciones encontradas");
 			musicaTableDir.setDisable(false);
+			
 		}
 	}
 
@@ -329,7 +332,6 @@ public class VistaPrincipalController {
 						try {
 							AbrirEnReproducctor(musicaTable);
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -358,7 +360,6 @@ public class VistaPrincipalController {
 						try {
 							AbrirEnReproducctor(musicaTableDir);
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
